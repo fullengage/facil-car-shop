@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Página Inicial / Marketplace -->
+  <url>
+    <loc>https://facilcarshop.com.br/</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Anúncio Exemplo 1: Corolla Altis 2023 -->
+  <url>
+    <loc>https://facilcarshop.com.br/carros/toyota-corolla-altis-2-0-16v-flex-aut-2023-sao-paulo-sp-demo-veh-001</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Toyota Corolla Altis 2.0 16V Flex Aut. 2023</image:title>
+    </image:image>
+  </url>
+
+  <!-- Anúncio Exemplo 2: Jeep Compass Longitude 2024 -->
+  <url>
+    <loc>https://facilcarshop.com.br/carros/jeep-compass-longitude-1-3-t270-4x2-flex-aut-2024-sao-paulo-sp-demo-veh-002</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Jeep Compass Longitude 1.3 T270 Flex Aut. 2024</image:title>
+    </image:image>
+  </url>
+</urlset>

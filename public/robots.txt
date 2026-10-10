@@ -1,0 +1,9 @@
+# robots.txt para Fácil Car Shop
+User-agent: *
+Allow: /
+Allow: /carros/
+Disallow: /admin/
+Disallow: /auditoria/
+
+# Sitemap Oficial
+Sitemap: https://facilcarshop.com.br/sitemap.xml
