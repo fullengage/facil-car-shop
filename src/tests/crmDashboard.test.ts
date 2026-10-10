@@ -57,10 +57,26 @@ describe('CRM Automotivo FCS & Dashboards (Fase 2)', () => {
 
   it('deve conter planos comerciais com limites de veículos e unidades', async () => {
     const plans = await listAllPlans()
-    expect(plans.length).toBeGreaterThanOrEqual(2)
-    const proPlan = plans.find((p) => p.slug === 'pro' || p.slug === 'profissional')
+    expect(plans.length).toBe(4)
+
+    const basicPlan = plans.find((p) => p.slug === 'basico')
+    expect(basicPlan).toBeDefined()
+    expect(basicPlan?.price_monthly).toBe(69.9)
+    expect(basicPlan?.vehicle_limit).toBe(10)
+
+    const proPlan = plans.find((p) => p.slug === 'profissional')
     expect(proPlan).toBeDefined()
-    expect(proPlan?.price_monthly).toBe(149)
-    expect(proPlan?.vehicle_limit).toBe(50)
+    expect(proPlan?.price_monthly).toBe(119.9)
+    expect(proPlan?.vehicle_limit).toBe(25)
+
+    const premiumPlan = plans.find((p) => p.slug === 'premium')
+    expect(premiumPlan).toBeDefined()
+    expect(premiumPlan?.price_monthly).toBe(199.9)
+    expect(premiumPlan?.vehicle_limit).toBe(60)
+
+    const enterprisePlan = plans.find((p) => p.slug === 'enterprise')
+    expect(enterprisePlan).toBeDefined()
+    expect(enterprisePlan?.price_monthly).toBe(299.9)
+    expect(enterprisePlan?.vehicle_limit).toBe(100)
   })
 })

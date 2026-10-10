@@ -2,50 +2,60 @@ import { Check, X } from "lucide-react";
 import { SectionTitle } from "@/components/site/ui/SectionTitle";
 import { Button } from "@/components/site/ui/Button";
 
-// Valores de exemplo: ajustar antes de publicar
 const PLANOS = [
   {
     nome: "Básico",
-    preco: "29",
+    preco: "69,90",
     destaque: false,
     itens: [
-      { t: "Até 10 anúncios ativos", ok: true },
+      { t: "Até 10 carros ativos", ok: true },
       { t: "Contato por WhatsApp", ok: true },
-      { t: "Anúncio em destaque", ok: false },
-      { t: "Relatório de visitas", ok: false },
+      { t: "CRM de leads básico", ok: true },
+      { t: "Anúncios em destaque", ok: false },
     ],
   },
   {
-    nome: "Pro",
-    preco: "149",
+    nome: "Profissional",
+    preco: "119,90",
     destaque: true,
     itens: [
-      { t: "Até 50 anúncios ativos", ok: true },
+      { t: "Até 25 carros ativos", ok: true },
       { t: "Contato por WhatsApp e e-mail", ok: true },
-      { t: "2 anúncios em destaque por mês", ok: true },
-      { t: "Relatório de visitas", ok: false },
+      { t: "Showroom exclusivo da loja", ok: true },
+      { t: "2 destaques por mês", ok: true },
     ],
   },
   {
     nome: "Premium",
-    preco: "299",
+    preco: "199,90",
     destaque: false,
     itens: [
-      { t: "Anúncios ilimitados", ok: true },
-      { t: "Contato por WhatsApp e e-mail", ok: true },
-      { t: "Destaques ilimitados", ok: true },
-      { t: "Relatório de visitas", ok: true },
+      { t: "Até 60 carros ativos", ok: true },
+      { t: "Até 2 lojas / filiais", ok: true },
+      { t: "Destaque e relatórios de visitas", ok: true },
+      { t: "Equipe multi-vendedores", ok: true },
+    ],
+  },
+  {
+    nome: "Enterprise",
+    preco: "299,90",
+    destaque: false,
+    itens: [
+      { t: "Até 100 carros ativos", ok: true },
+      { t: "Rede multiloja (até 5 lojas)", ok: true },
+      { t: "Destaques contínuos no portal", ok: true },
+      { t: "CRM avançado e suporte VIP", ok: true },
     ],
   },
 ];
 
-/** Três cards de plano por mês; o do meio fica destacado. */
+/** Quatro cards de planos para lojistas; Profissional com destaque visual. */
 export function Planos() {
   return (
     <section className="bg-white py-[100px]">
-      <div className="mx-auto max-w-[1200px] px-5">
+      <div className="mx-auto max-w-[1240px] px-5">
         <SectionTitle eyebrow="Planos para lojistas" align="center" title="Escolha o plano da sua loja" />
-        <div className="mt-16 grid gap-7 lg:grid-cols-3">
+        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {PLANOS.map((p) => (
             <article
               key={p.nome}
