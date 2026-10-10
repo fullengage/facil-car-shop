@@ -8,15 +8,17 @@ export function TopBar() {
         <ul className="flex flex-wrap items-center gap-x-6 gap-y-1">
           <li className="flex items-center gap-2">
             <Mail className="h-4 w-4 text-primary" aria-hidden />
-            contato@facilcarshop.exemplo.com.br
+            <a href="mailto:contato@facilcarshop.com.br" className="hover:text-primary transition-colors">
+              contato@facilcarshop.com.br
+            </a>
           </li>
           <li className="hidden items-center gap-2 sm:flex">
             <MapPin className="h-4 w-4 text-primary" aria-hidden />
-            Atendemos 5 cidades
+            <span>Atendemos 5 cidades : lugar mais fácil de encontrar carros</span>
           </li>
           <li className="hidden items-center gap-2 md:flex">
             <Clock className="h-4 w-4 text-primary" aria-hidden />
-            Seg a sáb · 9h às 18h
+            <span>Suporte de Seg a sáb · 9h às 18h</span>
           </li>
         </ul>
         <ul className="flex items-center gap-4 text-[13px] font-medium uppercase tracking-wide">
