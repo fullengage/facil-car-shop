@@ -14,7 +14,7 @@ export function TopBar() {
           </li>
           <li className="hidden items-center gap-2 sm:flex">
             <MapPin className="h-4 w-4 text-primary" aria-hidden />
-            <span>Atendemos 5 cidades : lugar mais fácil de encontrar carros</span>
+            <span>Encontre seu próximo carro sem sair da sua região.</span>
           </li>
           <li className="hidden items-center gap-2 md:flex">
             <Clock className="h-4 w-4 text-primary" aria-hidden />
