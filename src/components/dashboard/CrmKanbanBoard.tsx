@@ -151,8 +151,8 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 text-slate-400">
-        <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin mb-3" />
+      <div className="flex flex-col items-center justify-center p-12 text-text">
+        <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin mb-3" />
         <p className="text-sm">Carregando CRM Kanban...</p>
       </div>
     )
@@ -161,23 +161,23 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
   return (
     <div className="space-y-4">
       {/* Barra de Filtros e Busca */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-900/60 border border-slate-800 p-3 rounded-xl">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white border border-border p-3 rounded-xl">
         <div className="flex items-center space-x-2 flex-1 max-w-md">
           <Input
             value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
             placeholder="Buscar por cliente, carro ou canal..."
-            className="bg-slate-950 border-slate-800 text-sm h-9"
+            className="bg-surface border-border text-sm h-9"
           />
         </div>
 
         <div className="flex items-center space-x-2">
-          <Filter className="w-4 h-4 text-slate-400" />
-          <span className="text-xs text-slate-400 font-medium">Prioridade:</span>
+          <Filter className="w-4 h-4 text-text" />
+          <span className="text-xs text-text font-medium">Prioridade:</span>
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-xs text-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="bg-surface border border-border text-xs text-dark rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary"
           >
             <option value="all">Todas as prioridades</option>
             <option value="urgent">Urgente 🔥</option>
@@ -201,23 +201,23 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
               key={stage.stage_key || stage.id}
               onDragOver={handleDragOver}
               onDrop={() => handleDrop(stage.stage_key)}
-              className="flex-shrink-0 w-80 bg-slate-900/50 border border-slate-800/80 rounded-xl p-3 flex flex-col flex-1 min-h-[580px] max-h-[750px]"
+              className="flex-shrink-0 w-80 bg-white border border-border rounded-xl p-3 flex flex-col flex-1 min-h-[580px] max-h-[750px]"
             >
               {/* Header da Coluna */}
-              <div className="flex items-center justify-between pb-2.5 mb-2 border-b border-slate-800/80">
+              <div className="flex items-center justify-between pb-2.5 mb-2 border-b border-border">
                 <div className="flex items-center space-x-2">
                   <div
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: stage.color || '#3b82f6' }}
                   />
-                  <h3 className="font-semibold text-sm text-slate-100">{stage.name}</h3>
-                  <span className="text-xs bg-slate-800 text-slate-300 font-bold px-1.5 py-0.5 rounded-full">
+                  <h3 className="font-semibold text-sm text-dark">{stage.name}</h3>
+                  <span className="text-xs bg-surface text-dark font-bold px-1.5 py-0.5 rounded-full">
                     {stageLeads.length}
                   </span>
                 </div>
 
                 {totalValue > 0 && (
-                  <span className="text-[11px] text-emerald-400 font-bold">
+                  <span className="text-[11px] text-steel font-bold">
                     {formatCurrency(totalValue)}
                   </span>
                 )}
@@ -226,7 +226,7 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
               {/* Lista de Cards da Etapa */}
               <div className="flex-1 overflow-y-auto space-y-2.5 pr-1">
                 {stageLeads.length === 0 ? (
-                  <div className="h-32 border border-dashed border-slate-800/60 rounded-lg flex items-center justify-center text-xs text-slate-500">
+                  <div className="h-32 border border-dashed border-border rounded-lg flex items-center justify-center text-xs text-text">
                     Arraste uma oportunidade aqui
                   </div>
                 ) : (
@@ -239,13 +239,13 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
                         setActiveLeadModal(lead)
                         onLeadSelect?.(lead)
                       }}
-                      className={`group relative bg-slate-950 border border-slate-800 hover:border-slate-700 hover:shadow-lg rounded-xl p-3 cursor-grab active:cursor-grabbing transition-all ${
+                      className={`group relative bg-surface border border-border hover:border-border hover:shadow-lg rounded-xl p-3 cursor-grab active:cursor-grabbing transition-all ${
                         draggedLeadId === lead.id ? 'opacity-40 scale-95' : 'opacity-100'
                       }`}
                     >
                       {/* Tag de Prioridade e Origem */}
                       <div className="flex items-center justify-between text-[11px] mb-2">
-                        <span className="px-2 py-0.5 rounded-full font-semibold bg-slate-900 text-slate-400 border border-slate-800">
+                        <span className="px-2 py-0.5 rounded-full font-semibold bg-white text-text border border-border">
                           {lead.source}
                         </span>
 
@@ -255,7 +255,7 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
                           </span>
                         )}
                         {lead.priority === 'high' && (
-                          <span className="bg-amber-500/10 text-amber-400 font-bold px-2 py-0.5 rounded-full">
+                          <span className="bg-accent/10 text-primary font-bold px-2 py-0.5 rounded-full">
                             Alta
                           </span>
                         )}
@@ -263,18 +263,18 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
 
                       {/* Dados do Cliente */}
                       <div className="mb-2">
-                        <h4 className="text-sm font-bold text-slate-100 flex items-center space-x-1.5 group-hover:text-blue-400 transition-colors">
-                          <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <h4 className="text-sm font-bold text-dark flex items-center space-x-1.5 group-hover:text-primary transition-colors">
+                          <User className="w-3.5 h-3.5 text-text shrink-0" />
                           <span className="truncate">{lead.customer?.full_name || 'Cliente'}</span>
                         </h4>
-                        <p className="text-xs text-slate-400 truncate pl-5">
+                        <p className="text-xs text-text truncate pl-5">
                           {lead.customer?.phone || 'Sem telefone'}
                         </p>
                       </div>
 
                       {/* Veículo de Interesse */}
                       {lead.vehicle && (
-                        <div className="bg-slate-900/60 border border-slate-800/80 rounded-lg p-2 mb-2 flex items-center space-x-2">
+                        <div className="bg-white border border-border rounded-lg p-2 mb-2 flex items-center space-x-2">
                           {lead.vehicle.photos?.[0] ? (
                             <img
                               src={lead.vehicle.photos[0]}
@@ -282,15 +282,15 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
                               className="w-10 h-10 rounded object-cover shrink-0"
                             />
                           ) : (
-                            <div className="w-10 h-10 rounded bg-slate-800 flex items-center justify-center shrink-0">
-                              <Car className="w-5 h-5 text-slate-400" />
+                            <div className="w-10 h-10 rounded bg-surface flex items-center justify-center shrink-0">
+                              <Car className="w-5 h-5 text-text" />
                             </div>
                           )}
                           <div className="min-w-0 flex-1">
-                            <p className="text-xs font-semibold text-slate-200 truncate">
+                            <p className="text-xs font-semibold text-dark truncate">
                               {lead.vehicle.title}
                             </p>
-                            <p className="text-xs font-bold text-emerald-400">
+                            <p className="text-xs font-bold text-steel">
                               {formatCurrency(lead.vehicle.price)}
                             </p>
                           </div>
@@ -298,13 +298,13 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
                       )}
 
                       {/* Ações Rápidas (WhatsApp & Próxima Etapa) */}
-                      <div className="flex items-center justify-between pt-2 border-t border-slate-900 mt-2">
+                      <div className="flex items-center justify-between pt-2 border-t border-border mt-2">
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
                           onClick={(e) => handleOpenWhatsApp(lead, e)}
-                          className="h-7 px-2 text-xs text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 flex items-center space-x-1"
+                          className="h-7 px-2 text-xs text-steel hover:text-steel hover:bg-dark/10 flex items-center space-x-1"
                         >
                           <MessageCircle className="w-3.5 h-3.5" />
                           <span>WhatsApp</span>
@@ -315,7 +315,7 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
                           variant="ghost"
                           size="sm"
                           onClick={(e) => handleAdvanceStage(lead, e)}
-                          className="h-7 px-2 text-xs text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 flex items-center space-x-1"
+                          className="h-7 px-2 text-xs text-primary hover:text-primary hover:bg-primary-hover/10 flex items-center space-x-1"
                         >
                           <span>Avançar</span>
                           <ChevronRight className="w-3.5 h-3.5" />
@@ -333,37 +333,37 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
       {/* Modal de Detalhes da Oportunidade */}
       {activeLeadModal && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div className="bg-white border border-border rounded-2xl w-full max-w-lg p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
               <div>
-                <h3 className="text-lg font-bold text-white">
+                <h3 className="text-lg font-bold text-dark">
                   {activeLeadModal.customer?.full_name}
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-text">
                   Lead #{activeLeadModal.id} • Criado em{' '}
                   {new Date(activeLeadModal.created_at).toLocaleDateString('pt-BR')}
                 </p>
               </div>
               <button
                 onClick={() => setActiveLeadModal(null)}
-                className="text-slate-400 hover:text-white"
+                className="text-text hover:text-dark"
               >
                 ✕
               </button>
             </div>
 
             <div className="space-y-3 text-sm">
-              <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
-                <span className="text-xs text-slate-400 font-semibold block">Veículo Desejado</span>
-                <p className="font-bold text-white">{activeLeadModal.vehicle?.title}</p>
-                <p className="text-emerald-400 font-bold">
+              <div className="bg-surface p-3 rounded-xl border border-border space-y-1">
+                <span className="text-xs text-text font-semibold block">Veículo Desejado</span>
+                <p className="font-bold text-dark">{activeLeadModal.vehicle?.title}</p>
+                <p className="text-steel font-bold">
                   {formatCurrency(activeLeadModal.vehicle?.price || 0)}
                 </p>
               </div>
 
               <div className="space-y-1">
-                <span className="text-xs text-slate-400 font-semibold block">Notas e Histórico</span>
-                <p className="text-slate-300 text-xs bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <span className="text-xs text-text font-semibold block">Notas e Histórico</span>
+                <p className="text-dark text-xs bg-surface p-3 rounded-xl border border-border">
                   {activeLeadModal.customer?.notes || 'Nenhuma observação cadastrada.'}
                 </p>
               </div>
@@ -371,7 +371,7 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
               <div className="flex gap-2 pt-2">
                 <Button
                   onClick={(e) => handleOpenWhatsApp(activeLeadModal, e)}
-                  className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold flex items-center justify-center space-x-2"
+                  className="flex-1 bg-steel hover:bg-dark text-white font-bold flex items-center justify-center space-x-2"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>Chamar no WhatsApp</span>
@@ -379,7 +379,7 @@ export function CrmKanbanBoard({ sellerId, storeId, onLeadSelect }: CrmKanbanBoa
                 <Button
                   variant="outline"
                   onClick={() => setActiveLeadModal(null)}
-                  className="border-slate-700 text-slate-200"
+                  className="border-border text-dark"
                 >
                   Fechar
                 </Button>

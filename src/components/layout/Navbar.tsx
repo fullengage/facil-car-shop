@@ -3,7 +3,6 @@
 // ==============================================================================
 
 import {
-  CarFront,
   PlusCircle,
   Building2,
   Activity,
@@ -37,14 +36,11 @@ export function Navbar({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Logo e Identidade */}
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
-            <CarFront className="w-6 h-6" />
+          <div className="rounded-lg bg-white px-2.5 py-1.5">
+            <img src="/logo-facil-car-shop.png" alt="Fácil Car Shop" className="h-8 w-auto" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-lg font-black tracking-tight text-white">
-                FÁCIL CAR <span className="text-blue-500">SHOP</span>
-              </span>
               <Badge variant="default" className="text-[10px] py-0 px-1.5 hidden sm:inline-flex">
                 BrasilAPI • FIPE
               </Badge>

@@ -147,6 +147,7 @@ export function App() {
       {/* Conteúdo Central */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
         {isDashboardView && activeStore ? (
+          <div className="rounded-brand bg-surface p-4 text-dark sm:p-8">
           <DashboardLayout
             currentRole={currentRole}
             onRoleChange={setCurrentRole}
@@ -161,6 +162,7 @@ export function App() {
               setIsDashboardView(false)
             }}
           />
+          </div>
         ) : selectedVehicleForDetail ? (
           <VehicleDetailView
             vehicle={selectedVehicleForDetail}

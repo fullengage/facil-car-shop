@@ -68,8 +68,8 @@ export function SuperAdminDashboard() {
 
   if (isLoading || !metrics) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 text-slate-400">
-        <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin mb-3" />
+      <div className="flex flex-col items-center justify-center p-12 text-text">
+        <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin mb-3" />
         <p className="text-sm">Carregando indicadores do Super Admin...</p>
       </div>
     )
@@ -80,14 +80,14 @@ export function SuperAdminDashboard() {
       {/* Header do Painel */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center space-x-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-300 mb-2">
-            <ShieldAlert className="w-3.5 h-3.5 text-purple-400" />
+          <div className="inline-flex items-center space-x-2 rounded-full border border-primary bg-steel/10 px-3 py-1 text-xs font-semibold text-steel mb-2">
+            <ShieldAlert className="w-3.5 h-3.5 text-steel" />
             <span>Perfil: SUPER_ADMIN da Plataforma</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-white">
+          <h2 className="text-2xl sm:text-3xl font-black text-dark">
             Painel Geral da Plataforma
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-text">
             Controle de lojistas, planos, MRR recorrente, receita e moderação de anúncios.
           </p>
         </div>
@@ -95,65 +95,65 @@ export function SuperAdminDashboard() {
 
       {/* Grid de Métricas Principais */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+        <div className="rounded-2xl border border-border bg-white p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-slate-400">Receita Recorrente (MRR)</span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+            <span className="text-xs font-medium text-text">Receita Recorrente (MRR)</span>
+            <div className="w-8 h-8 rounded-lg bg-steel/10 text-steel flex items-center justify-center">
               <DollarSign className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-2xl font-black text-emerald-400">
+          <p className="text-2xl font-black text-steel">
             {formatCurrency(metrics.mrrTotal)}
           </p>
-          <span className="text-xs text-slate-500 mt-1 block">
+          <span className="text-xs text-text mt-1 block">
             {metrics.activeSubscriptions} assinaturas ativas
           </span>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+        <div className="rounded-2xl border border-border bg-white p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-slate-400">Lojistas Cadastrados</span>
-            <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+            <span className="text-xs font-medium text-text">Lojistas Cadastrados</span>
+            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
               <Building2 className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-2xl font-black text-white">{metrics.totalDealers}</p>
-          <span className="text-xs text-emerald-400 mt-1 block">
+          <p className="text-2xl font-black text-dark">{metrics.totalDealers}</p>
+          <span className="text-xs text-steel mt-1 block">
             {metrics.activeDealers} ativos • {metrics.pendingDealers} pendentes
           </span>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+        <div className="rounded-2xl border border-border bg-white p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-slate-400">Estoque Geral</span>
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+            <span className="text-xs font-medium text-text">Estoque Geral</span>
+            <div className="w-8 h-8 rounded-lg bg-steel/10 text-steel flex items-center justify-center">
               <CarFront className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-2xl font-black text-white">{metrics.totalVehicles} carros</p>
-          <span className="text-xs text-slate-500 mt-1 block">
+          <p className="text-2xl font-black text-dark">{metrics.totalVehicles} carros</p>
+          <span className="text-xs text-text mt-1 block">
             Em {metrics.totalStores} lojas ativas
           </span>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+        <div className="rounded-2xl border border-border bg-white p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-slate-400">Leads & Oportunidades</span>
-            <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+            <span className="text-xs font-medium text-text">Leads & Oportunidades</span>
+            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-2xl font-black text-white">{metrics.totalLeads}</p>
-          <span className="text-xs text-cyan-400 mt-1 block">Gerados no ecossistema</span>
+          <p className="text-2xl font-black text-dark">{metrics.totalLeads}</p>
+          <span className="text-xs text-primary mt-1 block">Gerados no ecossistema</span>
         </div>
       </div>
 
       {/* Tabela de Lojistas e Ações de Moderação */}
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
-        <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+      <div className="rounded-2xl border border-border bg-white overflow-hidden">
+        <div className="p-4 border-b border-border flex items-center justify-between">
           <div>
-            <h3 className="font-bold text-white text-base">Lojistas & Concessionárias</h3>
-            <p className="text-xs text-slate-400">
+            <h3 className="font-bold text-dark text-base">Lojistas & Concessionárias</h3>
+            <p className="text-xs text-text">
               Aprovação, suspensão e controle de permissões de empresas.
             </p>
           </div>
@@ -161,7 +161,7 @@ export function SuperAdminDashboard() {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-slate-950/60 text-slate-400 text-xs uppercase border-b border-slate-800">
+            <thead className="bg-surface text-text text-xs uppercase border-b border-border">
               <tr>
                 <th className="p-3.5">Empresa / Nome Fantasia</th>
                 <th className="p-3.5">CNPJ / CPF</th>
@@ -172,22 +172,22 @@ export function SuperAdminDashboard() {
             </thead>
             <tbody className="divide-y divide-slate-800/60">
               {dealers.map((dealer) => (
-                <tr key={dealer.id} className="hover:bg-slate-800/30 transition-colors">
+                <tr key={dealer.id} className="hover:bg-surface transition-colors">
                   <td className="p-3.5">
-                    <p className="font-bold text-white">{dealer.trade_name}</p>
-                    <p className="text-xs text-slate-400">{dealer.legal_name}</p>
+                    <p className="font-bold text-dark">{dealer.trade_name}</p>
+                    <p className="text-xs text-text">{dealer.legal_name}</p>
                   </td>
-                  <td className="p-3.5 font-mono text-xs text-slate-300">
+                  <td className="p-3.5 font-mono text-xs text-dark">
                     {dealer.document_number}
                   </td>
                   <td className="p-3.5">
                     {dealer.status === 'active' && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-steel/10 text-steel border border-primary">
                         Ativo
                       </span>
                     )}
                     {dealer.status === 'pending' && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-accent/10 text-primary border border-primary">
                         Aguardando Aprovação
                       </span>
                     )}
@@ -198,7 +198,7 @@ export function SuperAdminDashboard() {
                     )}
                   </td>
                   <td className="p-3.5">
-                    <span className="text-xs font-medium text-slate-300 uppercase">
+                    <span className="text-xs font-medium text-dark uppercase">
                       {dealer.subscription_status}
                     </span>
                   </td>
@@ -208,7 +208,7 @@ export function SuperAdminDashboard() {
                         <Button
                           size="sm"
                           onClick={() => handleStatusChange(dealer.id, 'active')}
-                          className="h-8 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold"
+                          className="h-8 bg-steel hover:bg-dark text-white text-xs font-bold"
                         >
                           <CheckCircle className="w-3.5 h-3.5 mr-1" />
                           Aprovar Lojista
@@ -234,27 +234,27 @@ export function SuperAdminDashboard() {
       </div>
 
       {/* Planos Disponíveis na Plataforma */}
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
-        <h3 className="font-bold text-white text-base mb-3 flex items-center space-x-2">
-          <Layers className="w-4 h-4 text-purple-400" />
+      <div className="rounded-2xl border border-border bg-white p-4">
+        <h3 className="font-bold text-dark text-base mb-3 flex items-center space-x-2">
+          <Layers className="w-4 h-4 text-steel" />
           <span>Planos Comerciais Disponíveis</span>
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2"
+              className="bg-surface border border-border rounded-xl p-4 space-y-2"
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <h4 className="font-bold text-white text-sm">{plan.name}</h4>
-                  <p className="text-xs text-slate-400">{plan.description}</p>
+                  <h4 className="font-bold text-dark text-sm">{plan.name}</h4>
+                  <p className="text-xs text-text">{plan.description}</p>
                 </div>
-                <span className="text-sm font-black text-emerald-400">
+                <span className="text-sm font-black text-steel">
                   {formatCurrency(plan.price_monthly)}/mês
                 </span>
               </div>
-              <div className="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-900">
+              <div className="text-xs text-text space-y-1 pt-2 border-t border-border">
                 <p>• Limite de até {plan.vehicle_limit} carros anunciados</p>
                 <p>• Até {plan.store_limit} unidades de loja</p>
                 <p>• Até {plan.seller_limit} vendedores autorizados</p>

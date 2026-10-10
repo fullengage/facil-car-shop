@@ -79,8 +79,8 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
   if (isLoading) {
 
     return (
-      <div className="flex flex-col items-center justify-center p-12 text-slate-400">
-        <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin mb-3" />
+      <div className="flex flex-col items-center justify-center p-12 text-text">
+        <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin mb-3" />
         <p className="text-sm">Carregando painel do vendedor...</p>
       </div>
     )
@@ -92,21 +92,21 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
       {/* Header Mobile First do Vendedor */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center space-x-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-300 mb-2">
-            <UserCheck className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="inline-flex items-center space-x-2 rounded-full border border-primary bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-2">
+            <UserCheck className="w-3.5 h-3.5 text-primary" />
             <span>Perfil: VENDEDOR • Carlos Eduardo Mendes</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-white">
+          <h2 className="text-2xl sm:text-3xl font-black text-dark">
             Meu Cockpit de Vendas
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-text">
             Meus leads, WhatsApp com 1 clique, tarefas pendentes e fechamento de propostas.
           </p>
         </div>
 
         <Button
           onClick={onOpenAddVehicle}
-          className="bg-blue-600 hover:bg-blue-500 text-white font-bold"
+          className="bg-primary hover:bg-primary-hover text-white font-bold"
         >
           <PlusCircle className="w-4 h-4 mr-2" />
           Cadastrar Veículo
@@ -115,53 +115,53 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
 
       {/* Cards de Métricas do Vendedor */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3 sm:p-4">
-          <span className="text-[11px] sm:text-xs font-medium text-slate-400 block mb-1">
+        <div className="rounded-xl border border-border bg-white p-3 sm:p-4">
+          <span className="text-[11px] sm:text-xs font-medium text-text block mb-1">
             Comissões Acumuladas
           </span>
-          <p className="text-xl sm:text-2xl font-black text-emerald-400">
+          <p className="text-xl sm:text-2xl font-black text-steel">
             {formatCurrency(totalCommissions || 2355.0)}
           </p>
-          <span className="text-[11px] text-slate-500 mt-0.5 block">Vendas confirmadas</span>
+          <span className="text-[11px] text-text mt-0.5 block">Vendas confirmadas</span>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3 sm:p-4">
-          <span className="text-[11px] sm:text-xs font-medium text-slate-400 block mb-1">
+        <div className="rounded-xl border border-border bg-white p-3 sm:p-4">
+          <span className="text-[11px] sm:text-xs font-medium text-text block mb-1">
             Tarefas para Hoje
           </span>
-          <p className="text-xl sm:text-2xl font-black text-amber-400">
+          <p className="text-xl sm:text-2xl font-black text-primary">
             {tasks.filter((t) => t.status === 'pending').length} pendentes
           </p>
-          <span className="text-[11px] text-slate-500 mt-0.5 block">Follow-ups e ligações</span>
+          <span className="text-[11px] text-text mt-0.5 block">Follow-ups e ligações</span>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3 sm:p-4">
-          <span className="text-[11px] sm:text-xs font-medium text-slate-400 block mb-1">
+        <div className="rounded-xl border border-border bg-white p-3 sm:p-4">
+          <span className="text-[11px] sm:text-xs font-medium text-text block mb-1">
             Propostas Enviadas
           </span>
-          <p className="text-xl sm:text-2xl font-black text-blue-400">
+          <p className="text-xl sm:text-2xl font-black text-primary">
             {proposals.length} propostas
           </p>
-          <span className="text-[11px] text-slate-500 mt-0.5 block">Aguardando resposta</span>
+          <span className="text-[11px] text-text mt-0.5 block">Aguardando resposta</span>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3 sm:p-4">
-          <span className="text-[11px] sm:text-xs font-medium text-slate-400 block mb-1">
+        <div className="rounded-xl border border-border bg-white p-3 sm:p-4">
+          <span className="text-[11px] sm:text-xs font-medium text-text block mb-1">
             Carros em Estoque
           </span>
-          <p className="text-xl sm:text-2xl font-black text-white">{vehicles.length} carros</p>
-          <span className="text-[11px] text-emerald-400 mt-0.5 block">Disponíveis para oferta</span>
+          <p className="text-xl sm:text-2xl font-black text-dark">{vehicles.length} carros</p>
+          <span className="text-[11px] text-steel mt-0.5 block">Disponíveis para oferta</span>
         </div>
       </div>
 
       {/* Tabs Mobile Friendly */}
-      <div className="flex space-x-2 overflow-x-auto border-b border-slate-800 pb-2 scrollbar-none">
+      <div className="flex space-x-2 overflow-x-auto border-b border-border pb-2 scrollbar-none">
         <button
           onClick={() => setActiveTab('kanban')}
           className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold whitespace-nowrap transition-colors ${
             activeTab === 'kanban'
-              ? 'bg-blue-600 text-white'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+              ? 'bg-primary text-white'
+              : 'text-text hover:text-dark hover:bg-surface'
           }`}
         >
           Meu Kanban
@@ -170,8 +170,8 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
           onClick={() => setActiveTab('tasks')}
           className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold whitespace-nowrap transition-colors ${
             activeTab === 'tasks'
-              ? 'bg-blue-600 text-white'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+              ? 'bg-primary text-white'
+              : 'text-text hover:text-dark hover:bg-surface'
           }`}
         >
           Minhas Tarefas ({tasks.filter((t) => t.status === 'pending').length})
@@ -180,8 +180,8 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
           onClick={() => setActiveTab('proposals')}
           className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold whitespace-nowrap transition-colors ${
             activeTab === 'proposals'
-              ? 'bg-blue-600 text-white'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+              ? 'bg-primary text-white'
+              : 'text-text hover:text-dark hover:bg-surface'
           }`}
         >
           Minhas Propostas ({proposals.length})
@@ -190,8 +190,8 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
           onClick={() => setActiveTab('sales')}
           className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold whitespace-nowrap transition-colors ${
             activeTab === 'sales'
-              ? 'bg-blue-600 text-white'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+              ? 'bg-primary text-white'
+              : 'text-text hover:text-dark hover:bg-surface'
           }`}
         >
           Minhas Vendas
@@ -200,8 +200,8 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
           onClick={() => setActiveTab('stock')}
           className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold whitespace-nowrap transition-colors ${
             activeTab === 'stock'
-              ? 'bg-blue-600 text-white'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+              ? 'bg-primary text-white'
+              : 'text-text hover:text-dark hover:bg-surface'
           }`}
         >
           Estoque da Loja
@@ -216,8 +216,8 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
 
       {activeTab === 'tasks' && (
         <div className="space-y-3">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 space-y-3">
-            <h3 className="font-bold text-white text-base">Atividades & Follow-ups do Dia</h3>
+          <div className="rounded-2xl border border-border bg-white p-4 space-y-3">
+            <h3 className="font-bold text-dark text-base">Atividades & Follow-ups do Dia</h3>
             <div className="divide-y divide-slate-800/60">
               {tasks.map((task) => (
                 <div
@@ -229,8 +229,8 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
                       onClick={() => toggleTaskStatus(task.id)}
                       className={`mt-0.5 w-5 h-5 rounded border flex items-center justify-center transition-colors ${
                         task.status === 'completed'
-                          ? 'bg-emerald-600 border-emerald-500 text-white'
-                          : 'border-slate-700 bg-slate-950 text-transparent'
+                          ? 'bg-steel border-primary text-white'
+                          : 'border-border bg-surface text-transparent'
                       }`}
                     >
                       <CheckCircle2 className="w-4 h-4" />
@@ -239,14 +239,14 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
                       <p
                         className={`text-sm font-bold ${
                           task.status === 'completed'
-                            ? 'line-through text-slate-500'
-                            : 'text-white'
+                            ? 'line-through text-text'
+                            : 'text-dark'
                         }`}
                       >
                         {task.title}
                       </p>
-                      <p className="text-xs text-slate-400 mt-0.5">{task.description}</p>
-                      <span className="text-[11px] text-amber-400 font-medium block mt-1">
+                      <p className="text-xs text-text mt-0.5">{task.description}</p>
+                      <span className="text-[11px] text-primary font-medium block mt-1">
                         Prazo: {new Date(task.due_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
@@ -256,7 +256,7 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
                     className={`text-xs px-2 py-0.5 rounded-full font-bold ${
                       task.priority === 'high'
                         ? 'bg-red-500/10 text-red-400'
-                        : 'bg-slate-800 text-slate-400'
+                        : 'bg-surface text-text'
                     }`}
                   >
                     {task.priority === 'high' ? 'Alta' : 'Normal'}
@@ -269,26 +269,26 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
       )}
 
       {activeTab === 'proposals' && (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 space-y-3">
-          <h3 className="font-bold text-white text-base">Propostas Comerciais em Andamento</h3>
+        <div className="rounded-2xl border border-border bg-white p-4 space-y-3">
+          <h3 className="font-bold text-dark text-base">Propostas Comerciais em Andamento</h3>
           {proposals.map((prop) => (
             <div
               key={prop.id}
-              className="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row justify-between sm:items-center gap-3"
+              className="bg-surface border border-border rounded-xl p-4 flex flex-col sm:flex-row justify-between sm:items-center gap-3"
             >
               <div>
-                <span className="text-xs text-slate-400">Proposta #{prop.id}</span>
-                <p className="text-white font-bold text-sm">Toyota Corolla 2.0 XEi</p>
-                <p className="text-xs text-slate-400">{prop.notes}</p>
+                <span className="text-xs text-text">Proposta #{prop.id}</span>
+                <p className="text-dark font-bold text-sm">Toyota Corolla 2.0 XEi</p>
+                <p className="text-xs text-text">{prop.notes}</p>
               </div>
               <div className="text-right">
-                <span className="text-xs text-slate-400 block line-through">
+                <span className="text-xs text-text block line-through">
                   De {formatCurrency(prop.asking_price)}
                 </span>
-                <span className="text-base font-black text-emerald-400 block">
+                <span className="text-base font-black text-steel block">
                   Por {formatCurrency(prop.proposed_price)}
                 </span>
-                <span className="text-[11px] text-blue-400 font-bold uppercase">
+                <span className="text-[11px] text-primary font-bold uppercase">
                   Status: {prop.status}
                 </span>
               </div>
@@ -298,22 +298,22 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
       )}
 
       {activeTab === 'sales' && (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 space-y-3">
-          <h3 className="font-bold text-white text-base">Vendas e Comissões Fechadas</h3>
+        <div className="rounded-2xl border border-border bg-white p-4 space-y-3">
+          <h3 className="font-bold text-dark text-base">Vendas e Comissões Fechadas</h3>
           {sales.map((sale) => (
             <div
               key={sale.id}
-              className="bg-slate-950 border border-slate-800 rounded-xl p-4 flex justify-between items-center"
+              className="bg-surface border border-border rounded-xl p-4 flex justify-between items-center"
             >
               <div>
-                <p className="text-white font-bold text-sm">Chevrolet Onix Premier 1.0 Turbo</p>
-                <p className="text-xs text-slate-400">
+                <p className="text-dark font-bold text-sm">Chevrolet Onix Premier 1.0 Turbo</p>
+                <p className="text-xs text-text">
                   Fechamento em {new Date(sale.sold_at).toLocaleDateString('pt-BR')}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm font-bold text-white">{formatCurrency(sale.final_price)}</p>
-                <p className="text-xs font-black text-emerald-400">
+                <p className="text-sm font-bold text-dark">{formatCurrency(sale.final_price)}</p>
+                <p className="text-xs font-black text-steel">
                   Comissão: +{formatCurrency(sale.commission_amount || 0)}
                 </p>
               </div>
@@ -327,13 +327,13 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
           {vehicles.map((v) => (
             <div
               key={v.id}
-              className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 space-y-2"
+              className="bg-white border border-border rounded-xl p-4 space-y-2"
             >
-              <h4 className="font-bold text-white text-sm truncate">{v.title}</h4>
-              <p className="text-xs text-slate-400">
+              <h4 className="font-bold text-dark text-sm truncate">{v.title}</h4>
+              <p className="text-xs text-text">
                 {v.model_year} • {v.mileage} km • {v.plate_masked || 'Placa protegida'}
               </p>
-              <p className="text-base font-black text-emerald-400">{formatCurrency(v.price)}</p>
+              <p className="text-base font-black text-steel">{formatCurrency(v.price)}</p>
             </div>
           ))}
         </div>
