@@ -220,3 +220,23 @@ export async function deleteVehicle(id: string): Promise<boolean> {
   saveStoredVehicles(filtered)
   return true
 }
+
+/**
+ * Leitura pública (vitrine): usa a view fcs_public_vehicle_listings, que só traz a placa
+ * mascarada e só veículos publicados de lojas aprovadas. Nunca consulta fcs_vehicles direto.
+ */
+export async function listPublicVehicles(storeId: string): Promise<Vehicle[]> {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('fcs_public_vehicle_listings')
+        .select('*')
+        .eq('store_id', storeId)
+        .order('created_at', { ascending: false })
+      if (!error && data) return data as Vehicle[]
+    } catch {
+      // Fallback para cache local (demonstração sem Supabase)
+    }
+  }
+  return (await listVehicles(storeId)).filter((v) => v.status === 'published')
+}

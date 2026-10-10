@@ -1,0 +1,34 @@
+[
+  {
+    "slug": "chevrolet",
+    "nome": "Chevrolet"
+  },
+  {
+    "slug": "fiat",
+    "nome": "Fiat"
+  },
+  {
+    "slug": "ford",
+    "nome": "Ford"
+  },
+  {
+    "slug": "honda",
+    "nome": "Honda"
+  },
+  {
+    "slug": "hyundai",
+    "nome": "Hyundai"
+  },
+  {
+    "slug": "jeep",
+    "nome": "Jeep"
+  },
+  {
+    "slug": "toyota",
+    "nome": "Toyota"
+  },
+  {
+    "slug": "volkswagen",
+    "nome": "Volkswagen"
+  }
+]

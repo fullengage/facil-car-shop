@@ -5,16 +5,15 @@
 // ==============================================================================
 
 import type { Store } from '@/types'
-import { getStoreByDomain, getStoreBySlug } from './storeService'
+import { getStoreByDomain } from './storeService'
 
 export type Tenant = { kind: 'platform' } | { kind: 'store'; store: Store }
 
 // Host da plataforma (ex: facilcarshop.com.br). Vazio em desenvolvimento local.
 const PLATFORM_HOST = (import.meta.env.VITE_PLATFORM_HOST as string | undefined) ?? ''
-const SLUG_PATH = /^\/loja\/([a-z0-9-]+)\/?$/
 
 export async function resolveTenant(): Promise<Tenant> {
-  const { hostname, pathname } = window.location
+  const { hostname } = window.location
   const isPlatformHost =
     !PLATFORM_HOST || hostname === PLATFORM_HOST || hostname === 'localhost' || hostname === '127.0.0.1'
 
@@ -24,11 +23,6 @@ export async function resolveTenant(): Promise<Tenant> {
     return { kind: 'platform' }
   }
 
-  const slug = SLUG_PATH.exec(pathname)?.[1]
-  if (slug) {
-    const store = await getStoreBySlug(slug)
-    if (store) return { kind: 'store', store }
-  }
 
   return { kind: 'platform' }
 }

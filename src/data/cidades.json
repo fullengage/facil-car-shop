@@ -1,0 +1,27 @@
+[
+  {
+    "slug": "sao-paulo",
+    "nome": "São Paulo",
+    "uf": "SP"
+  },
+  {
+    "slug": "campinas",
+    "nome": "Campinas",
+    "uf": "SP"
+  },
+  {
+    "slug": "curitiba",
+    "nome": "Curitiba",
+    "uf": "PR"
+  },
+  {
+    "slug": "belo-horizonte",
+    "nome": "Belo Horizonte",
+    "uf": "MG"
+  },
+  {
+    "slug": "rio-de-janeiro",
+    "nome": "Rio de Janeiro",
+    "uf": "RJ"
+  }
+]

@@ -84,3 +84,65 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white font-sans text-[18px] leading-[30px] font-normal text-text antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-black text-dark;
+  }
+  h1 {
+    @apply text-[32px] leading-[38px] md:text-[48px] md:leading-[56px];
+  }
+  h2 {
+    @apply text-[30px] leading-[36px] md:text-[47px] md:leading-[62px];
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+}
+
+/* ==============================================================================
+   ANIMAÇÃO DE ENTRADA — o conteúdo já está no HTML; o JS só adiciona o estado inicial
+   ============================================================================== */
+.js .reveal:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.reveal {
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal,
+  .js .reveal:not(.is-visible) {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+}
+
+/* Faixa de texto que rola em loop (marquee) */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 30s linear infinite;
+}

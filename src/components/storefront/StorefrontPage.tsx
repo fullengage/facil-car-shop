@@ -19,7 +19,7 @@ import {
   SlidersHorizontal,
   TrendingDown,
 } from 'lucide-react'
-import { listVehicles } from '@/services/vehicleService'
+import { listPublicVehicles } from '@/services/vehicleService'
 import type { Store, Vehicle } from '@/types'
 import { formatCurrency } from '@/utils/plateValidator'
 import { StorefrontVehicleCard } from './StorefrontVehicleCard'
@@ -54,7 +54,7 @@ export function StorefrontPage({ store }: StorefrontPageProps) {
   const [sort, setSort] = React.useState<SortKey>('relevance')
 
   React.useEffect(() => {
-    listVehicles(store.id)
+    listPublicVehicles(store.id)
       .then((list) => setVehicles(list.filter((v) => v.status === 'published')))
       .finally(() => setIsLoading(false))
   }, [store.id])

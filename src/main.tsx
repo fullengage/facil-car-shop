@@ -1,4 +1,5 @@
 import { StrictMode } from 'react'
+import { BrowserRouter } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
 import * as React from 'react'
 import './index.css'
@@ -15,7 +16,7 @@ function Root() {
   }, [])
 
   if (!tenant) return null
-  return tenant.kind === 'store' ? <StorefrontPage store={tenant.store} /> : <App />
+  return tenant.kind === 'store' ? <StorefrontPage store={tenant.store} /> : <BrowserRouter><App /></BrowserRouter>
 }
 
 createRoot(document.getElementById('root')!).render(
