@@ -14,6 +14,7 @@ import CarrosPage from '@/pages/site/CarrosPage'
 import NotFoundPage from '@/pages/site/NotFoundPage'
 import { CidadePage, LojaPage, LojasListPage, MarcaPage, ModeloPage, VeiculoPage } from '@/pages/site/SitePages'
 import PainelPage from '@/pages/PainelPage'
+import TiagoDemoPage from '@/pages/site/TiagoDemoPage'
 
 /** Rola até a âncora (#marcas, #anuncie...) ao trocar de rota ou de hash. */
 function ScrollToHash() {
@@ -47,6 +48,7 @@ export function App() {
           <Route path="/lojas/:slug" element={<LojaPage />} />
           <Route path="/loja/:slug" element={<LojaRedirect />} />
           <Route path="/painel" element={<PainelPage />} />
+          <Route path="/previews/classificados-de-tiago" element={<TiagoDemoPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
