@@ -13,7 +13,7 @@ import HomePage from '@/pages/site/HomePage'
 import LiveCarrosPage from '@/pages/site/LiveCarrosPage'
 import LiveLojasPage from '@/pages/site/LiveLojasPage'
 import NotFoundPage from '@/pages/site/NotFoundPage'
-import { CidadePage, LojaPage, LojasListPage, MarcaPage, ModeloPage, VeiculoPage } from '@/pages/site/SitePages'
+import { CidadePage, LojaPage, MarcaPage, ModeloPage, VeiculoPage } from '@/pages/site/SitePages'
 import PainelPage from '@/pages/PainelPage'
 import TiagoDemoPage from '@/pages/site/TiagoDemoPage'
 
