@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Seo } from "@/components/site/Seo";
 
@@ -16,6 +17,8 @@ const preco = (valor: number) =>
 
 /** Protótipo NÃO PUBLICADO: sem cadastro de terceiro, sem associação com loja real, sem links de compra. */
 export default function TiagoDemoPage() {
+  const [etapa, setEtapa] = useState<"catalogo" | "checkout">("catalogo");
+  const [selecionado, setSelecionado] = useState<string | null>(null);
   return (
     <div className="mx-auto max-w-[1200px] px-5 py-12">
       <Seo
@@ -35,6 +38,21 @@ export default function TiagoDemoPage() {
         <div className="rounded-brand bg-surface p-5"><p className="text-3xl font-bold">10</p><p>Capacidade simulada do plano</p></div>
         <div className="rounded-brand bg-surface p-5"><p className="text-3xl font-bold">3</p><p>Vagas disponíveis para mais anúncios</p></div>
       </div>
+      <div className="mt-8 rounded-brand border border-border p-6">
+        <h2 className="text-2xl font-bold text-dark">Simulação completa de contratação</h2>
+        <p className="mt-2">Plano Básico · R$ 59,90/mês · 10 veículos. Abaixo é somente um ensaio da jornada do cliente, sem cadastro bancário, cobrança verdadeira ou conta ativada.</p>
+        <button type="button" onClick={() => setEtapa(etapa === "checkout" ? "catalogo" : "checkout")} className="mt-4 rounded-brand bg-primary px-5 py-3 font-bold text-white">
+          {etapa === "checkout" ? "Ocultar checkout de teste" : "Simular escolha do plano e checkout"}
+        </button>
+        {etapa === "checkout" && <div className="mt-5 rounded-brand bg-surface p-5">
+          <p className="font-bold">Pedido de teste — NÃO É UMA COBRANÇA</p>
+          <p className="mt-2">Loja simulada: Classificados de Tiago</p>
+          <p>Plano: Básico, 10 anúncios por R$ 59,90/mês</p>
+          <p>Status: aguardando cadastro e autorização do anunciante; sem PIX solicitado ou recebido.</p>
+          <p className="mt-2 text-sm">O fluxo real exige titular autenticado, pedido no Supabase, confirmação manual do crédito e liberação exclusiva do administrador.</p>
+          <div className="mt-4 rounded-brand border border-amber-300 bg-amber-50 p-3 text-sm">Conta real: não criada · Pagamento: não efetuado · Assinatura ativa: não</div>
+        </div>}
+      </div>
       <h2 className="mt-12 text-2xl font-bold text-dark">Veículos para conferência</h2>
       <p className="mt-2 text-sm">Dados transcritos da captura do Facebook Marketplace de 11/10/2026. Fotos, quilometragem, versão e disponibilidade não foram validadas.</p>
       <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -44,6 +62,16 @@ export default function TiagoDemoPage() {
             <h3 className="text-xl font-bold text-dark">{v.nome} {v.ano}</h3>
             <p className="mt-2 text-2xl font-black text-primary">{preco(v.preco)}</p>
             <p className="mt-2 text-xs text-muted">Anúncio em revisão · não disponível para compra aqui</p>
+            <button type="button" onClick={() => setSelecionado(selecionado === v.id ? null : v.id)} className="mt-3 rounded-brand border border-border px-4 py-2 text-sm font-bold text-dark">
+              {selecionado === v.id ? "Fechar ficha" : "Ver ficha de teste"}
+            </button>
+            {selecionado === v.id && <dl className="mt-3 space-y-1 text-sm">
+              <div><dt className="inline font-medium">Cidade:</dt><dd className="inline"> Novo Horizonte, SP</dd></div>
+              <div><dt className="inline font-medium">Ano:</dt><dd className="inline"> {v.ano}</dd></div>
+              <div><dt className="inline font-medium">Quilometragem:</dt><dd className="inline"> a confirmar</dd></div>
+              <div><dt className="inline font-medium">Versão e combustível:</dt><dd className="inline"> a confirmar</dd></div>
+              <div><dt className="inline font-medium">Disponibilidade:</dt><dd className="inline"> não verificada</dd></div>
+            </dl>}
           </li>
         ))}
       </ul>
