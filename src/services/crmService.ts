@@ -314,11 +314,11 @@ export async function listLeads(options?: {
 }
 
 export async function updateLeadStage(leadId: string, newStageId: string): Promise<boolean> {
-  if (!supabase) return true
+  if (!supabase) return false
 
   // Se não for UUID válido (ex: mock em teste), retornar true sem erro
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(leadId)
-  if (!isUuid) return true
+  if (!isUuid) return false
 
   try {
     const { error } = await supabase
@@ -358,7 +358,7 @@ export async function recordContactEvent(event: {
   eventType: string
   metadata?: Record<string, unknown>
 }): Promise<boolean> {
-  if (!supabase) return true
+  if (!supabase) return false
 
   try {
     const { error } = await supabase.from('fcs_contact_events').insert({
