@@ -23,6 +23,7 @@ export default function LiveCarrosPage() {
  const [params,setParams]=useSearchParams();
  const search=params.get("busca")||"";
  const cidade=params.get("cidade")||"";
+ const lojaId=params.get("loja")||"";
  useEffect(()=>{
   let active=true;
   async function load() {
@@ -37,7 +38,8 @@ export default function LiveCarrosPage() {
  },[]);
  const filtered=useMemo(()=>cars.filter(c=>
   (!search||[c.title,c.brand,c.model,c.store_name].some(v=>v?.toLocaleLowerCase("pt-BR").includes(search.toLocaleLowerCase("pt-BR")))) &&
-  (!cidade||c.store_city?.toLocaleLowerCase("pt-BR").includes(cidade.toLocaleLowerCase("pt-BR")))
+  (!cidade||c.store_city?.toLocaleLowerCase("pt-BR").includes(cidade.toLocaleLowerCase("pt-BR"))) &&
+  (!lojaId||c.store_id===lojaId)
  ),[cars,search,cidade]);
  return <div className="mx-auto max-w-[1200px] px-5 py-12">
   <Seo title="Carros seminovos e usados à venda" description="Anúncios publicados por revendas aprovadas no Fácil Car Shop." canonical="/carros"/>
