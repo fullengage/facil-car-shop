@@ -1,0 +1,63 @@
+{
+  "source": "Facebook Marketplace screenshot provided by user 2026-10-11",
+  "source_url": "https://www.facebook.com/marketplace/profile/100002244867860/",
+  "seller_display_name": "Classificados de Tiago",
+  "city": "Novo Horizonte",
+  "state": "SP",
+  "status": "draft_private_review",
+  "notice": "Dados transcritos exclusivamente da captura fornecida pelo usuário. NÃO publicar, associar a loja real ou fazer contato em nome do vendedor sem autorização. Estoque e direitos de uso de fotos não verificados. Sem fotos, placa, quilometragem, combustível ou links individuais confirmados.",
+  "vehicles": [
+    {
+      "id": "tiago-draft-001",
+      "year": 2018,
+      "brand": "Jeep",
+      "model": "Renegade",
+      "price_brl": 73000
+    },
+    {
+      "id": "tiago-draft-002",
+      "year": 2010,
+      "brand": "Fiat",
+      "model": "Uno",
+      "price_brl": 26000
+    },
+    {
+      "id": "tiago-draft-003",
+      "year": 2010,
+      "brand": "Fiat",
+      "model": "Palio",
+      "price_brl": 24900,
+      "old_price_brl": 26900
+    },
+    {
+      "id": "tiago-draft-004",
+      "year": 2010,
+      "brand": "Fiat",
+      "model": "Uno",
+      "price_brl": 23000,
+      "old_price_brl": 24900
+    },
+    {
+      "id": "tiago-draft-005",
+      "year": 2020,
+      "brand": "Fiat",
+      "model": "Argo",
+      "price_brl": 66900
+    },
+    {
+      "id": "tiago-draft-006",
+      "year": 2011,
+      "brand": "Volkswagen",
+      "model": "Gol",
+      "price_brl": 25500
+    },
+    {
+      "id": "tiago-draft-007",
+      "year": 2011,
+      "brand": "Fiat",
+      "model": "Strada",
+      "price_brl": 45900,
+      "old_price_brl": 48900
+    }
+  ]
+}
