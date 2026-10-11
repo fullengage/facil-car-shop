@@ -38,7 +38,7 @@ export default function LiveLojasPage(){
    <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{visible.map(x=><article key={x.id} className="rounded-brand border border-border p-6">
     <h2 className="text-2xl font-bold text-dark">{x.name}</h2><p className="mt-2">{x.address_city||"Cidade não informada"} / {x.address_state||"UF não informada"}</p>
     <p className="mt-2">{counts[x.id]||0} anúncios publicados</p>
-    <Link to={`/carros?busca=${encodeURIComponent(x.name)}`} className="mt-4 inline-block font-bold text-primary">Ver veículos da loja</Link>
+    <Link to={`/carros?loja=${encodeURIComponent(x.id)}`} className="mt-4 inline-block font-bold text-primary">Ver veículos da loja</Link>
    </article>)}</div>}
  </div>
 }
