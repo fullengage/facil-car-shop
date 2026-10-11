@@ -1,5 +1,5 @@
 import Image from "@/components/site/Image";
-import { getCidades, getMarcas, getVeiculos, getLojas } from "@/lib/site/data";
+import { getCidades, getMarcas, getVeiculos } from "@/lib/site/data";
 import { SearchBox } from "@/components/site/vehicles/SearchBox";
 import { Button } from "@/components/site/ui/Button";
 import { Car, Store, MapPin, Star } from "lucide-react";
@@ -7,14 +7,13 @@ import { Car, Store, MapPin, Star } from "lucide-react";
 /** Hero escuro com foto de fundo, título, busca e painel vertical laranja com números. */
 export function Hero() {
   const veiculos = getVeiculos().length;
-  const lojas = getLojas().length;
   const cidades = getCidades().length;
 
   const numeros = [
     { icon: Car, valor: `${veiculos}+`, label: "Veículos anunciados" },
-    { icon: Store, valor: `${lojas}`, label: "Lojas parceiras" },
+    { icon: Store, valor: "100%", label: "Lojas verificadas" },
     { icon: MapPin, valor: `${cidades}`, label: "Cidades atendidas" },
-    { icon: Star, valor: "4,8", label: "Avaliação média" },
+    { icon: Star, valor: "FIPE", label: "Preço de referência" },
   ];
 
   return (

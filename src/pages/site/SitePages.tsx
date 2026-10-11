@@ -1,20 +1,21 @@
 // Páginas com parâmetros de rota (marca, modelo, cidade, veículo e loja) do portal.
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { Breadcrumbs } from "@/components/site/ui/Breadcrumbs";
 import { Button } from "@/components/site/ui/Button";
 import { Galeria } from "@/components/site/vehicles/Galeria";
 import { PropostaForm } from "@/components/site/vehicles/PropostaForm";
 import { VehicleCard } from "@/components/site/vehicles/VehicleCard";
 import { Listagem } from "@/components/site/vehicles/Listagem";
-import { LojaCard } from "@/components/site/stores/LojaCard";
 import { Seo } from "@/components/site/Seo";
-import { getCidadeBySlug, getLojaById, getLojaBySlug, getLojas, getMarcaBySlug, getSemelhantes, getVeiculoBySlug, getVeiculos, getVeiculosDaLoja } from "@/lib/site/data";
+import { getCidadeBySlug, getLojaById, getLojaBySlug, getMarcaBySlug, getSemelhantes, getVeiculoBySlug, getVeiculos, getVeiculosDaLoja } from "@/lib/site/data";
 import { formatBRL, formatKm } from "@/lib/site/format";
 import { slugify } from "@/lib/site/slug";
 import { veiculoLd, lojaLd } from "@/lib/site/seo";
 import { useSearchParamsObject } from "@/pages/site/params";
 import { NotFoundInline } from "@/pages/site/NotFoundInline";
-import { Check, MapPin, MessageCircle, Store, Clock, Mail, Phone, Star } from "lucide-react";
+import { Car, Check, MapPin, MessageCircle, Store, Clock, Mail, Phone, Star } from "lucide-react";
+import { supabase } from "@/services/supabaseClient";
 
 function modeloDaMarca(marca: string, modelo: string) {
   const veiculos = getVeiculos().filter((v) => v.marca === marca && slugify(v.modelo) === modelo);
@@ -242,19 +243,156 @@ export function LojaPage() {
   );
 }
 
+type RealStore = {
+  id: string;
+  name: string;
+  slug: string | null;
+  address_city: string | null;
+  address_state: string | null;
+  count: number;
+};
+
 export function LojasListPage() {
+  const [stores, setStores] = useState<RealStore[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    async function loadStores() {
+      if (!supabase) {
+        if (active) setLoading(false);
+        return;
+      }
+      try {
+        const [storesRes, listingsRes] = await Promise.all([
+          supabase
+            .from("fcs_stores")
+            .select("id, name, slug, address_city, address_state, status")
+            .eq("status", "approved")
+            .order("name")
+            .limit(100),
+          supabase
+            .from("fcs_public_vehicle_listings")
+            .select("store_id")
+            .limit(1000)
+        ]);
+
+        if (!active) return;
+
+        if (storesRes.error) {
+          setError("Não foi possível carregar as lojas no momento.");
+        } else {
+          const counts: Record<string, number> = {};
+          if (listingsRes.data) {
+            for (const item of listingsRes.data) {
+              if (item.store_id) {
+                counts[item.store_id] = (counts[item.store_id] || 0) + 1;
+              }
+            }
+          }
+          const loaded = (storesRes.data || []).map((s) => ({
+            id: s.id,
+            name: s.name,
+            slug: s.slug,
+            address_city: s.address_city,
+            address_state: s.address_state,
+            count: counts[s.id] || 0,
+          }));
+          setStores(loaded);
+        }
+      } catch {
+        if (active) setError("Falha ao carregar catálogo de lojas parceiras.");
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+    loadStores();
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <>
-      <Seo title="Lojas parceiras" description="Conheça as lojas e revendas parceiras, com estoque de carros seminovos e usados em cada cidade." canonical="/lojas" />
+      <Seo
+        title="Lojas parceiras"
+        description="Conheça as lojas e revendas parceiras credenciadas no Fácil Car Shop."
+        canonical="/lojas"
+      />
       <div className="mx-auto max-w-[1200px] px-5 py-12">
         <Breadcrumbs itens={[{ nome: "Lojas" }]} />
         <header className="mb-12 mt-6 max-w-[760px] space-y-4">
           <h1>Lojas parceiras</h1>
-          <p className="text-[18px] leading-[30px]">Revendas verificadas com estoque de seminovos e usados. Escolha uma loja para ver todos os carros dela.</p>
+          <p className="text-[18px] leading-[30px]">
+            Revendas credenciadas com procedência garantida. Somente estabelecimentos aprovados e auditados são exibidos.
+          </p>
         </header>
-        <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-          {getLojas().map((loja) => <LojaCard key={loja.id} loja={loja} />)}
-        </div>
+
+        {loading ? (
+          <div className="flex items-center justify-center py-16" role="status">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            <span className="ml-3 text-[16px] text-muted">Carregando lojas parceiras...</span>
+          </div>
+        ) : error ? (
+          <div className="rounded-brand border border-red-200 bg-red-50 p-6 text-center text-red-800" role="alert">
+            <p className="font-semibold">{error}</p>
+          </div>
+        ) : stores.length === 0 ? (
+          <div className="rounded-brand border border-border bg-surface p-10 text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <Store className="h-8 w-8" />
+            </div>
+            <h2 className="text-2xl font-bold text-dark">Nenhuma loja parceira aprovada no momento</h2>
+            <p className="mx-auto mt-2 max-w-[580px] text-[16px] text-muted">
+              Todas as revendas cadastradas passam por análise documental e validação de procedência antes de serem publicadas no catálogo. Não exibimos lojas demonstrativas ou fictícias.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Link
+                to="/#anuncie"
+                className="inline-flex items-center gap-2 rounded-brand bg-primary px-6 py-3.5 font-bold text-white shadow-soft transition-colors hover:bg-primary-hover"
+              >
+                Cadastrar minha loja
+              </Link>
+              <Link
+                to="/"
+                className="inline-flex items-center gap-2 rounded-brand border border-border bg-white px-6 py-3.5 font-bold text-dark transition-colors hover:bg-surface"
+              >
+                Voltar ao início
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+            {stores.map((loja) => (
+              <article key={loja.id} className="flex h-full flex-col gap-5 rounded-brand border border-border bg-white p-7 transition-colors hover:border-primary">
+                <div className="flex items-center justify-between">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-brand bg-dark text-[22px] font-black text-white">
+                    {loja.name.charAt(0)}
+                  </span>
+                  <span className="rounded bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+                    Aprovada
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-[22px] font-bold leading-[28px] text-dark">{loja.name}</h3>
+                  <p className="flex items-center gap-2 text-[15px] text-muted">
+                    <MapPin className="h-4 w-4 text-primary" aria-hidden /> {loja.address_city || "Cidade não informada"}, {loja.address_state || "UF"}
+                  </p>
+                  <p className="flex items-center gap-2 text-[15px] text-muted">
+                    <Car className="h-4 w-4 text-primary" aria-hidden /> {loja.count} {loja.count === 1 ? "veículo publicado" : "veículos publicados"}
+                  </p>
+                </div>
+                <Link
+                  to={loja.slug ? `/lojas/${loja.slug}` : `/carros?loja=${encodeURIComponent(loja.id)}`}
+                  className="mt-auto text-[15px] font-medium uppercase tracking-wide text-primary hover:text-dark"
+                >
+                  Ver veículos da loja →
+                </Link>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

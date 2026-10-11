@@ -6,6 +6,7 @@ import { getLojas } from "@/lib/site/data";
 /** Carrossel de lojas em destaque (cards renderizados no servidor). */
 export function LojasDestaque() {
   const cards = getLojas().map((loja) => <LojaCard key={loja.id} loja={loja} />);
+  if (cards.length === 0) return null;
   return (
     <section className="bg-white py-[100px]">
       <div className="mx-auto max-w-[1200px] px-5">
