@@ -40,7 +40,7 @@ export default function LiveCarrosPage() {
   (!search||[c.title,c.brand,c.model,c.store_name].some(v=>v?.toLocaleLowerCase("pt-BR").includes(search.toLocaleLowerCase("pt-BR")))) &&
   (!cidade||c.store_city?.toLocaleLowerCase("pt-BR").includes(cidade.toLocaleLowerCase("pt-BR"))) &&
   (!lojaId||c.store_id===lojaId)
- ),[cars,search,cidade]);
+ ),[cars,search,cidade,lojaId]);
  return <div className="mx-auto max-w-[1200px] px-5 py-12">
   <Seo title="Carros seminovos e usados à venda" description="Anúncios publicados por revendas aprovadas no Fácil Car Shop." canonical="/carros"/>
   <h1 className="text-4xl font-black text-dark">Carros à venda</h1>
