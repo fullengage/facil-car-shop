@@ -40,15 +40,15 @@ export interface SuperAdminMetrics {
 
 export async function getSuperAdminMetrics(): Promise<SuperAdminMetrics> {
   const fallbackMetrics: SuperAdminMetrics = {
-    totalDealers: 1,
-    activeDealers: 1,
+    totalDealers: 0,
+    activeDealers: 0,
     pendingDealers: 0,
     suspendedDealers: 0,
-    totalStores: 1,
-    totalVehicles: 6,
-    totalLeads: 8,
-    mrrTotal: 590.0,
-    activeSubscriptions: 1,
+    totalStores: 0,
+    totalVehicles: 0,
+    totalLeads: 0,
+    mrrTotal: 0,
+    activeSubscriptions: 0,
     pastDueSubscriptions: 0,
   }
 
@@ -77,7 +77,7 @@ export async function getSuperAdminMetrics(): Promise<SuperAdminMetrics> {
       subsRes.data.forEach((sub: any) => {
         if (sub.status === 'active') {
           activeSubscriptions++
-          const price = sub.fcs_plans?.price_monthly || 590
+          const price = sub.fcs_plans?.price_monthly ?? 0
           mrrTotal += Number(price)
         } else if (sub.status === 'past_due') {
           pastDueSubscriptions++
@@ -85,61 +85,37 @@ export async function getSuperAdminMetrics(): Promise<SuperAdminMetrics> {
       })
     }
 
-    // Se mrr for 0 (dados iniciais), garantir valor realista baseado em planos ativos
-    if (mrrTotal === 0 && activeDealers > 0) {
-      mrrTotal = activeDealers * 590.0
-    }
-
     return {
-      totalDealers: totalDealers || 1,
-      activeDealers: activeDealers || 1,
+      totalDealers,
+      activeDealers,
       pendingDealers,
       suspendedDealers,
-      totalStores: storesRes.count || 1,
-      totalVehicles: vehiclesRes.count || 6,
-      totalLeads: leadsRes.count || 8,
-      mrrTotal: mrrTotal || 590.0,
-      activeSubscriptions: activeSubscriptions || 1,
+      totalStores: storesRes.count ?? 0,
+      totalVehicles: vehiclesRes.count ?? 0,
+      totalLeads: leadsRes.count ?? 0,
+      mrrTotal,
+      activeSubscriptions,
       pastDueSubscriptions,
     }
   } catch (error) {
     console.error('Erro ao carregar métricas Super Admin:', error)
     return {
-      totalDealers: 1,
-      activeDealers: 1,
+      totalDealers: 0,
+      activeDealers: 0,
       pendingDealers: 0,
       suspendedDealers: 0,
-      totalStores: 1,
-      totalVehicles: 6,
-      totalLeads: 8,
-      mrrTotal: 590.0,
-      activeSubscriptions: 1,
+      totalStores: 0,
+      totalVehicles: 0,
+      totalLeads: 0,
+      mrrTotal: 0,
+      activeSubscriptions: 0,
       pastDueSubscriptions: 0,
     }
   }
 }
 
 export async function listAllDealers(): Promise<FCSDealer[]> {
-  const fallbackDealers: FCSDealer[] = [
-    {
-      id: DEFAULT_DEALER_ID,
-      legal_name: 'Auto Fácil Concessionárias & Participações Ltda',
-      trade_name: 'Rede Auto Fácil Matriz',
-      document_number: '12.345.678/0001-90',
-      document_type: 'cnpj',
-      owner_user_id: null,
-      email: 'contato@autofacil.com.br',
-      phone: '+55 11 98888-7777',
-      status: 'active',
-      subscription_status: 'active',
-      approved_at: new Date().toISOString(),
-      approved_by: null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ]
-
-  if (!supabase) return fallbackDealers
+  if (!supabase) return []
 
   try {
     const { data, error } = await supabase
@@ -148,12 +124,10 @@ export async function listAllDealers(): Promise<FCSDealer[]> {
       .order('created_at', { ascending: false })
 
     if (error) throw error
-    if (data && data.length > 0) return data as FCSDealer[]
-
-    return fallbackDealers
+    return (data ?? []) as FCSDealer[]
   } catch (error) {
     console.error('Erro ao listar lojistas:', error)
-    return fallbackDealers
+    return []
   }
 }
 
@@ -161,7 +135,7 @@ export async function updateDealerStatus(
   dealerId: string,
   newStatus: 'active' | 'suspended' | 'pending' | 'rejected'
 ): Promise<boolean> {
-  if (!supabase) return true
+  if (!supabase) return false
 
   try {
     const { error } = await supabase
@@ -340,11 +314,11 @@ export async function listLeads(options?: {
 }
 
 export async function updateLeadStage(leadId: string, newStageId: string): Promise<boolean> {
-  if (!supabase) return true
+  if (!supabase) return false
 
   // Se não for UUID válido (ex: mock em teste), retornar true sem erro
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(leadId)
-  if (!isUuid) return true
+  if (!isUuid) return false
 
   try {
     const { error } = await supabase
@@ -384,7 +358,7 @@ export async function recordContactEvent(event: {
   eventType: string
   metadata?: Record<string, unknown>
 }): Promise<boolean> {
-  if (!supabase) return true
+  if (!supabase) return false
 
   try {
     const { error } = await supabase.from('fcs_contact_events').insert({
