@@ -6,7 +6,6 @@ import { LojistaBloco } from "@/components/site/home/LojistaBloco";
 import { ComoComprar } from "@/components/site/home/ComoComprar";
 import { LojasDestaque } from "@/components/site/home/LojasDestaque";
 import { Planos } from "@/components/site/home/Planos";
-import { Depoimentos } from "@/components/site/home/Depoimentos";
 import { FaqSection, FAQ } from "@/components/site/home/FaqSection";
 import { AnuncieForm } from "@/components/site/home/AnuncieForm";
 import { CtaBand } from "@/components/site/home/CtaBand";
@@ -50,7 +49,6 @@ export default function HomePage() {
       <ComoComprar />
       <LojasDestaque />
       <Planos />
-      <Depoimentos />
       <FaqSection />
       <AnuncieForm />
       <CtaBand />
