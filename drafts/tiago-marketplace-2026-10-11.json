@@ -59,5 +59,15 @@
       "price_brl": 45900,
       "old_price_brl": 48900
     }
-  ]
+  ],
+  "demo_subscription": {
+    "plan": "basico",
+    "vehicle_limit": 10,
+    "monthly_price_brl": 59.9,
+    "subscription_status": "simulation_only_unpaid",
+    "dealer_account_created": false,
+    "payment_received": false,
+    "capacity_remaining": 3,
+    "publication_authorized": false
+  }
 }
