@@ -82,7 +82,7 @@ export function AnuncieForm() {
           {enviado ? (
             <div role="status" className="mt-6 rounded-brand border border-emerald-200 bg-emerald-50 p-5 text-emerald-800">
               <strong className="block font-bold">Solicitação enviada!</strong>
-              <p className="mt-1 text-[14px]">Enviamos as instruções de acesso para o seu e-mail. Nossa equipe confirma a loja pelo WhatsApp.</p>
+              <p className="mt-1 text-[14px]">Recebemos sua solicitação de cadastro. Aguarde a validação da loja antes de anunciar veículos. A equipe poderá entrar em contato pelos dados informados.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
