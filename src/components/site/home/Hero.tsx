@@ -1,32 +1,21 @@
-import Image from "@/components/site/Image";
-import { getCidades, getMarcas, getVeiculos, getLojas } from "@/lib/site/data";
+import { getCidades, getMarcas } from "@/lib/site/data";
 import { SearchBox } from "@/components/site/vehicles/SearchBox";
 import { Button } from "@/components/site/ui/Button";
-import { Car, Store, MapPin, Star } from "lucide-react";
+import { Search, Store, MessageCircle, Car } from "lucide-react";
 
 /** Hero escuro com foto de fundo, título, busca e painel vertical laranja com números. */
 export function Hero() {
-  const veiculos = getVeiculos().length;
-  const lojas = getLojas().length;
-  const cidades = getCidades().length;
-
-  const numeros = [
-    { icon: Car, valor: `${veiculos}+`, label: "Veículos anunciados" },
-    { icon: Store, valor: `${lojas}`, label: "Lojas parceiras" },
-    { icon: MapPin, valor: `${cidades}`, label: "Cidades atendidas" },
-    { icon: Star, valor: "4,8", label: "Avaliação média" },
+  // Benefícios verificáveis da proposta, sem avaliações ou contadores de clientes fictícios.
+  const beneficios = [
+    { icon: Search, titulo: "Busque veículos", descricao: "Explore anúncios no portal" },
+    { icon: Store, titulo: "Conheça as revendas", descricao: "Compare lojas e vitrines" },
+    { icon: Car, titulo: "Encontre seu carro", descricao: "Filtre suas preferências" },
+    { icon: MessageCircle, titulo: "Fale com a loja", descricao: "Contato direto pelo WhatsApp" },
   ];
 
   return (
     <section className="relative isolate overflow-hidden bg-dark text-white">
-      <Image
-        src="https://placehold.co/1920x1080/171717/333f4d/png?text=Foto+de+fundo"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="-z-10 object-cover opacity-40"
-      />
+
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-dark via-dark/85 to-dark/40" />
 
       <div className="mx-auto grid max-w-[1200px] gap-12 px-5 pb-16 pt-20 lg:grid-cols-[1fr_340px] lg:pb-24 lg:pt-28">
@@ -51,11 +40,11 @@ export function Hero() {
 
         {/* Painel vertical laranja (vira grade 2x2 no mobile) */}
         <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-brand bg-primary lg:grid-cols-1">
-          {numeros.map(({ icon: Icon, valor, label }) => (
-            <li key={label} className="flex items-center justify-between gap-4 bg-primary p-6 lg:p-7">
+          {beneficios.map(({ icon: Icon, titulo, descricao }) => (
+            <li key={titulo} className="flex items-center justify-between gap-4 bg-primary p-6 lg:p-7">
               <div>
-                <p className="text-[40px] font-black leading-none text-white lg:text-[48px]">{valor}</p>
-                <p className="mt-2 text-[15px] text-white/90">{label}</p>
+                <p className="text-[20px] font-black leading-snug text-white">{titulo}</p>
+                <p className="mt-2 text-[15px] text-white/90">{descricao}</p>
               </div>
               <span className="hidden h-14 w-14 shrink-0 items-center justify-center rounded-full bg-black/15 sm:flex">
                 <Icon className="h-6 w-6 text-white" aria-hidden />
