@@ -115,26 +115,7 @@ export async function getSuperAdminMetrics(): Promise<SuperAdminMetrics> {
 }
 
 export async function listAllDealers(): Promise<FCSDealer[]> {
-  const fallbackDealers: FCSDealer[] = [
-    {
-      id: DEFAULT_DEALER_ID,
-      legal_name: 'Auto Fácil Concessionárias & Participações Ltda',
-      trade_name: 'Rede Auto Fácil Matriz',
-      document_number: '12.345.678/0001-90',
-      document_type: 'cnpj',
-      owner_user_id: null,
-      email: 'contato@autofacil.com.br',
-      phone: '+55 11 98888-7777',
-      status: 'active',
-      subscription_status: 'active',
-      approved_at: new Date().toISOString(),
-      approved_by: null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ]
-
-  if (!supabase) return fallbackDealers
+  if (!supabase) return []
 
   try {
     const { data, error } = await supabase
@@ -143,12 +124,10 @@ export async function listAllDealers(): Promise<FCSDealer[]> {
       .order('created_at', { ascending: false })
 
     if (error) throw error
-    if (data && data.length > 0) return data as FCSDealer[]
-
-    return fallbackDealers
+    return (data ?? []) as FCSDealer[]
   } catch (error) {
     console.error('Erro ao listar lojistas:', error)
-    return fallbackDealers
+    return []
   }
 }
 
