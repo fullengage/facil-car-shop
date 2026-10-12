@@ -38,14 +38,8 @@ export default function PainelPage() {
   const [editingVehicle, setEditingVehicle] = React.useState<Vehicle | null>(null)
 
   // Papel de navegação no painel (inicializa com o papel real autenticado)
-  const [currentRole, setCurrentRole] = React.useState<UserRole>('LOJISTA')
-
-  // Sincroniza o papel inicial com o perfil autenticado
-  React.useEffect(() => {
-    if (userRole) {
-      setCurrentRole(userRole)
-    }
-  }, [userRole])
+  // O perfil exibido é sempre o atribuído à sessão autenticada, nunca uma seleção do navegador.
+  const currentRole: UserRole = userRole
 
   // Carregamento de Loja e Veículos quando o usuário está logado
   React.useEffect(() => {
@@ -186,7 +180,6 @@ export default function PainelPage() {
           <div className="rounded-brand bg-surface p-4 text-dark sm:p-8">
             <DashboardLayout
               currentRole={currentRole}
-              onRoleChange={setCurrentRole}
               onBackToMarketplace={() => navigate('/')}
               activeStore={activeStore}
               stores={stores.length > 0 ? stores : [activeStore]}
