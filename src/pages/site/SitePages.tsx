@@ -99,17 +99,111 @@ export function CidadePage() {
 
 export function VeiculoPage() {
   const { slug = "" } = useParams();
-  const v = getVeiculoBySlug(slug);
+  const vMock = getVeiculoBySlug(slug);
+  const [liveVeiculo, setLiveVeiculo] = useState<any>(null);
+  const [loading, setLoading] = useState(!vMock);
+
+  useEffect(() => {
+    let active = true;
+    if (vMock) {
+      setLoading(false);
+      return;
+    }
+    async function loadLive() {
+      if (!supabase) {
+        if (active) setLoading(false);
+        return;
+      }
+      try {
+        const { data, error } = await supabase
+          .from("fcs_public_vehicle_listings")
+          .select("*")
+          .eq("id", slug)
+          .maybeSingle();
+
+        if (active) {
+          if (!error && data) {
+            let photosArray: string[] = [];
+            if (Array.isArray(data.photos)) {
+              photosArray = data.photos
+                .map((p: any) => (typeof p === "string" ? p : p?.url))
+                .filter(Boolean);
+            }
+            if (photosArray.length === 0) {
+              photosArray = ["https://placehold.co/1200x900/171717/EB3300/png?text=Foto+do+Veiculo"];
+            }
+            setLiveVeiculo({
+              id: data.id,
+              slug: data.id,
+              titulo: data.title,
+              marca: data.brand,
+              modelo: data.model,
+              versao: data.version || "Padrão",
+              ano: data.model_year,
+              km: data.mileage || 0,
+              cambio: data.transmission || "Automático",
+              combustivel: data.fuel_type || "Flex",
+              carroceria: "Veículo",
+              motor: "Flex",
+              potencia: "—",
+              portas: 4,
+              cor: data.color || "Não informada",
+              preco: Number(data.price),
+              cidade: data.store_city || "",
+              cidadeNome: `${data.store_city || ""}/${data.store_state || ""}`,
+              lojaId: data.store_id,
+              lojaNome: data.store_name,
+              fotos: photosArray,
+              descricao: data.description || "Veículo anunciado no Fácil Car Shop com procedência verificada.",
+              opcionais: ["Ar-condicionado", "Direção elétrica", "Vidros elétricos", "Freios ABS", "Airbags"],
+              destaque: false,
+              novo: false,
+              publicadoEm: data.created_at,
+            });
+          }
+        }
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+    loadLive();
+    return () => {
+      active = false;
+    };
+  }, [slug, vMock]);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center py-20" role="status">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <span className="ml-3 text-[16px] text-muted">Carregando veículo...</span>
+      </div>
+    );
+  }
+
+  const v = vMock || liveVeiculo;
   if (!v) return <NotFoundInline />;
+
   const loja = getLojaById(v.lojaId);
   const semelhantes = getSemelhantes(v);
-  const whatsapp = loja ? `https://wa.me/${loja.whatsapp}?text=${encodeURIComponent(`Olá! Vi o ${v.titulo} por ${formatBRL(v.preco)} no portal e tenho interesse.`)}` : null;
+  const whatsapp = loja
+    ? `https://wa.me/${loja.whatsapp}?text=${encodeURIComponent(`Olá! Vi o ${v.titulo} por ${formatBRL(v.preco)} no portal e tenho interesse.`)}`
+    : null;
   const ficha: [string, string][] = [
-    ["Marca", v.marca], ["Modelo", v.modelo], ["Versão", v.versao], ["Ano", String(v.ano)],
-    ["Quilometragem", formatKm(v.km)], ["Câmbio", v.cambio], ["Combustível", v.combustivel],
-    ["Carroceria", v.carroceria], ["Motor", v.motor], ["Potência", v.potencia],
-    ["Portas", v.portas ? String(v.portas) : "—"], ["Cor", v.cor],
+    ["Marca", v.marca],
+    ["Modelo", v.modelo],
+    ["Versão", v.versao],
+    ["Ano", String(v.ano)],
+    ["Quilometragem", formatKm(v.km)],
+    ["Câmbio", v.cambio],
+    ["Combustível", v.combustivel],
+    ["Carroceria", v.carroceria],
+    ["Motor", v.motor],
+    ["Potência", v.potencia],
+    ["Portas", v.portas ? String(v.portas) : "—"],
+    ["Cor", v.cor],
   ];
+
   return (
     <div className="mx-auto max-w-[1200px] px-5 py-12">
       <Seo
@@ -141,7 +235,7 @@ export function VeiculoPage() {
           <section className="space-y-5">
             <h2 className="text-[26px] leading-[32px] md:text-[30px] md:leading-[38px]">Opcionais</h2>
             <ul className="grid gap-3 sm:grid-cols-2">
-              {v.opcionais.map((o) => (
+              {v.opcionais.map((o: string) => (
                 <li key={o} className="flex items-center gap-3"><Check className="h-4 w-4 text-primary" aria-hidden /> {o}</li>
               ))}
             </ul>
@@ -172,7 +266,7 @@ export function VeiculoPage() {
             <div className="space-y-3 border-t border-white/10 pt-6">
               <p className="text-[16px] font-bold">Faça uma proposta</p>
               <div className="text-dark">
-                <PropostaForm titulo={v.titulo} loja={loja?.nome ?? "loja"} veiculoId={v.id} lojaId={v.lojaId} />
+                <PropostaForm titulo={v.titulo} loja={loja?.nome ?? v.lojaNome ?? "loja"} veiculoId={v.id} lojaId={v.lojaId} />
               </div>
             </div>
           </div>
@@ -192,9 +286,107 @@ export function VeiculoPage() {
 
 export function LojaPage() {
   const { slug = "" } = useParams();
-  const loja = getLojaBySlug(slug);
+  const lojaMock = getLojaBySlug(slug);
+  const [liveLoja, setLiveLoja] = useState<any>(null);
+  const [liveEstoque, setLiveEstoque] = useState<any[]>([]);
+  const [loading, setLoading] = useState(!lojaMock);
+
+  useEffect(() => {
+    let active = true;
+    if (lojaMock) {
+      setLoading(false);
+      return;
+    }
+    async function loadLiveLoja() {
+      if (!supabase) {
+        if (active) setLoading(false);
+        return;
+      }
+      try {
+        const { data: store, error } = await supabase
+          .from("fcs_stores")
+          .select("*")
+          .eq("status", "approved")
+          .or(`id.eq.${slug},slug.eq.${slug}`)
+          .maybeSingle();
+
+        if (active) {
+          if (!error && store) {
+            setLiveLoja({
+              id: store.id,
+              slug: store.slug || store.id,
+              nome: store.name,
+              cidade: store.address_city || "Cidade não informada",
+              uf: store.address_state || "UF",
+              endereco: store.address_street ? `${store.address_street}, ${store.address_number || "S/N"}` : "Endereço comercial",
+              telefone: store.phone || "(11) 99999-9999",
+              whatsapp: store.whatsapp ? store.whatsapp.replace(/\D/g, "") : (store.phone ? store.phone.replace(/\D/g, "") : "5511999999999"),
+              email: store.email || "contato@facilcarshop.com.br",
+              horario: store.opening_hours ? "Seg a sex 8h às 18h · Sáb 8h às 13h" : "Seg a sex 9h às 18h",
+              descricao: store.description || "Revenda parceira credenciada e aprovada no Fácil Car Shop.",
+              plano: "pro",
+              avaliacao: 5.0,
+            });
+
+            const { data: veiculos } = await supabase
+              .from("fcs_public_vehicle_listings")
+              .select("*")
+              .eq("store_id", store.id);
+
+            if (veiculos) {
+              setLiveEstoque(veiculos.map((veh: any) => {
+                let photo = "https://placehold.co/1200x900/171717/EB3300/png?text=Foto";
+                if (Array.isArray(veh.photos) && veh.photos.length > 0) {
+                  photo = typeof veh.photos[0] === "string" ? veh.photos[0] : veh.photos[0]?.url || photo;
+                }
+                return {
+                  id: veh.id,
+                  slug: veh.id,
+                  titulo: veh.title,
+                  marca: veh.brand,
+                  modelo: veh.model,
+                  versao: veh.version || "",
+                  ano: veh.model_year,
+                  km: veh.mileage || 0,
+                  cambio: veh.transmission || "Automático",
+                  combustivel: veh.fuel_type || "Flex",
+                  carroceria: "Veículo",
+                  preco: Number(veh.price),
+                  cidade: veh.store_city || "",
+                  cidadeNome: `${veh.store_city}/${veh.store_state}`,
+                  lojaId: veh.store_id,
+                  lojaNome: veh.store_name,
+                  destaque: false,
+                  novo: false,
+                  fotos: [photo],
+                  publicadoEm: veh.created_at,
+                };
+              }));
+            }
+          }
+        }
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+    loadLiveLoja();
+    return () => {
+      active = false;
+    };
+  }, [slug, lojaMock]);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center py-20" role="status">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <span className="ml-3 text-[16px] text-muted">Carregando loja parceira...</span>
+      </div>
+    );
+  }
+
+  const loja = lojaMock || liveLoja;
   if (!loja) return <NotFoundInline />;
-  const estoque = getVeiculosDaLoja(loja.id);
+  const estoque = lojaMock ? getVeiculosDaLoja(loja.id) : liveEstoque;
   const endereco = `${loja.endereco}, ${loja.cidade} - ${loja.uf}`;
   return (
     <div className="mx-auto max-w-[1200px] px-5 py-12">
@@ -233,7 +425,7 @@ export function LojaPage() {
         <h2 className="text-[30px] leading-[36px] md:text-[40px] md:leading-[48px]">Estoque da {loja.nome}</h2>
         {estoque.length > 0 ? (
           <div className="grid gap-7 sm:grid-cols-2 xl:grid-cols-3">
-            {estoque.map((v) => <VehicleCard key={v.id} v={v} />)}
+            {estoque.map((v: any) => <VehicleCard key={v.id} v={v} />)}
           </div>
         ) : (
           <p>Esta loja não tem veículos anunciados no momento.</p>
