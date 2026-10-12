@@ -12,6 +12,7 @@ import { DealerDashboard } from './DealerDashboard'
 import { StoreAdminDashboard } from './StoreAdminDashboard'
 import { SellerDashboard } from './SellerDashboard'
 import { BuyerDashboard } from './BuyerDashboard'
+import { EstoquePatio } from './EstoquePatio'
 
 export type UserRole =
   | 'SUPER_ADMIN'
@@ -212,6 +213,10 @@ export function DashboardLayout({
             vehicles={vehicles}
             onOpenAddVehicle={onOpenAddVehicle}
           />
+        )}
+
+        {(currentRole === 'LOJISTA' || currentRole === 'ADMIN_LOJA') && (
+          <EstoquePatio vehicles={vehicles} onOpenAddVehicle={onOpenAddVehicle} onSelectVehicle={onSelectVehicle} />
         )}
 
         {currentRole === 'COMPRADOR' && (

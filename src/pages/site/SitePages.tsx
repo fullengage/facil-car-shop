@@ -97,10 +97,14 @@ export function CidadePage() {
   );
 }
 
+const isUUID = (str: string) =>
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+
 export function VeiculoPage() {
   const { slug = "" } = useParams();
   const vMock = getVeiculoBySlug(slug);
   const [liveVeiculo, setLiveVeiculo] = useState<any>(null);
+  const [liveLoja, setLiveLoja] = useState<any>(null);
   const [loading, setLoading] = useState(!vMock);
 
   useEffect(() => {
@@ -115,11 +119,17 @@ export function VeiculoPage() {
         return;
       }
       try {
-        const { data, error } = await supabase
+        let query = supabase
           .from("fcs_public_vehicle_listings")
-          .select("*")
-          .eq("id", slug)
-          .maybeSingle();
+          .select("*");
+
+        if (isUUID(slug)) {
+          query = query.eq("id", slug);
+        } else {
+          query = query.eq("slug", slug);
+        }
+
+        const { data, error } = await query.maybeSingle();
 
         if (active) {
           if (!error && data) {
@@ -160,6 +170,32 @@ export function VeiculoPage() {
               novo: false,
               publicadoEm: data.created_at,
             });
+
+            if (data.store_id) {
+              const { data: storeData } = await supabase
+                .from("fcs_stores")
+                .select("*")
+                .eq("id", data.store_id)
+                .maybeSingle();
+
+              if (active && storeData) {
+                setLiveLoja({
+                  id: storeData.id,
+                  slug: storeData.slug || storeData.id,
+                  nome: storeData.name,
+                  cidade: storeData.address_city || "",
+                  uf: storeData.address_state || "",
+                  endereco: storeData.address_street || "",
+                  telefone: storeData.phone || "",
+                  whatsapp: storeData.whatsapp ? storeData.whatsapp.replace(/\D/g, "") : (storeData.phone ? storeData.phone.replace(/\D/g, "") : ""),
+                  email: storeData.email || "",
+                  horario: "Seg a sex 8h às 18h · Sáb 8h às 13h",
+                  descricao: storeData.description || "",
+                  plano: "pro",
+                  avaliacao: 5.0,
+                });
+              }
+            }
           }
         }
       } finally {
@@ -184,7 +220,7 @@ export function VeiculoPage() {
   const v = vMock || liveVeiculo;
   if (!v) return <NotFoundInline />;
 
-  const loja = getLojaById(v.lojaId);
+  const loja = getLojaById(v.lojaId) || liveLoja;
   const semelhantes = getSemelhantes(v);
   const whatsapp = loja
     ? `https://wa.me/${loja.whatsapp}?text=${encodeURIComponent(`Olá! Vi o ${v.titulo} por ${formatBRL(v.preco)} no portal e tenho interesse.`)}`
@@ -303,12 +339,18 @@ export function LojaPage() {
         return;
       }
       try {
-        const { data: store, error } = await supabase
+        let query = supabase
           .from("fcs_stores")
           .select("*")
-          .eq("status", "approved")
-          .or(`id.eq.${slug},slug.eq.${slug}`)
-          .maybeSingle();
+          .eq("status", "approved");
+
+        if (isUUID(slug)) {
+          query = query.eq("id", slug);
+        } else {
+          query = query.eq("slug", slug);
+        }
+
+        const { data: store, error } = await query.maybeSingle();
 
         if (active) {
           if (!error && store) {

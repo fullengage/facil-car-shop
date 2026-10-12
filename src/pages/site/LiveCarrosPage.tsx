@@ -7,7 +7,9 @@ import { Car, Search } from "lucide-react";
 
 type PublicCar = {
   id: string;
+  slug?: string | null;
   store_id: string;
+  store_slug?: string | null;
   store_name: string;
   store_city: string;
   store_state: string;
@@ -190,7 +192,7 @@ export default function LiveCarrosPage() {
               key={c.id}
               className="overflow-hidden rounded-brand border border-border bg-white shadow-soft transition-all hover:border-primary"
             >
-              <Link to={`/veiculo/${encodeURIComponent(c.id)}`} className="block overflow-hidden bg-surface">
+              <Link to={`/veiculo/${encodeURIComponent(c.slug || c.id)}`} className="block overflow-hidden bg-surface">
                 {firstPhoto(c.photos) ? (
                   <img
                     src={firstPhoto(c.photos)!}
@@ -206,7 +208,7 @@ export default function LiveCarrosPage() {
                 )}
               </Link>
               <div className="p-5">
-                <Link to={`/veiculo/${encodeURIComponent(c.id)}`}>
+                <Link to={`/veiculo/${encodeURIComponent(c.slug || c.id)}`}>
                   <h2 className="text-xl font-bold text-dark transition-colors hover:text-primary">
                     {c.title}
                   </h2>
@@ -221,13 +223,13 @@ export default function LiveCarrosPage() {
                 </p>
                 <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
                   <Link
-                    to={`/veiculo/${encodeURIComponent(c.id)}`}
+                    to={`/veiculo/${encodeURIComponent(c.slug || c.id)}`}
                     className="text-sm font-bold text-primary hover:text-dark"
                   >
                     Ver detalhes →
                   </Link>
                   <Link
-                    to={`/lojas?loja=${encodeURIComponent(c.store_id)}`}
+                    to={c.store_slug ? `/lojas/${encodeURIComponent(c.store_slug)}` : `/lojas?loja=${encodeURIComponent(c.store_id)}`}
                     className="text-xs font-semibold text-muted hover:text-primary"
                   >
                     Ver loja
