@@ -9,38 +9,14 @@ import { isSupabaseConfigured, supabase } from './supabaseClient'
 
 const LOCAL_STORAGE_KEY = 'fcs_stores_cache'
 
-// Loja padrão inicial para agilizar testes e demonstração do vendedor
-const DEFAULT_DEMO_STORE: Store = {
-  id: 'store-demo-001',
-  slug: 'auto-facil-premium',
-  name: 'Auto Fácil Premium',
-  corporate_name: 'Auto Facil Veículos Ltda',
-  cnpj: '12.345.678/0001-90',
-  phone: '(11) 98765-4321',
-  email: 'contato@autofacilpremium.com.br',
-  cep: '01310-100',
-  address_street: 'Avenida Paulista',
-  address_number: '1000',
-  address_complement: 'Sala 102',
-  address_neighborhood: 'Bela Vista',
-  address_city: 'São Paulo',
-  address_state: 'SP',
-  status: 'approved',
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-}
-
 function getStoredStores(): Store[] {
-  if (typeof window === 'undefined') return [DEFAULT_DEMO_STORE]
+  if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY)
-    if (!raw) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([DEFAULT_DEMO_STORE]))
-      return [DEFAULT_DEMO_STORE]
-    }
+    if (!raw) return []
     return JSON.parse(raw) as Store[]
   } catch {
-    return [DEFAULT_DEMO_STORE]
+    return []
   }
 }
 
@@ -57,8 +33,7 @@ export async function listStores(): Promise<Store[]> {
         .select('*')
         .order('created_at', { ascending: false })
 
-      // Banco vazio também cai no cache local (ex.: loja de demonstração)
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         return data as Store[]
       }
     } catch {
@@ -72,7 +47,6 @@ export async function listStores(): Promise<Store[]> {
 /** Vitrine pública: só lojas aprovadas (a RLS já filtra no Supabase). */
 export async function getStoreBySlug(slug: string): Promise<Store | null> {
   const stores = await listStores()
-  // ponytail: lojas antigas sem slug (migração ainda não aplicada) usam o slug do nome
   return stores.find((s) => (s.slug || slugify(s.name)) === slug) ?? null
 }
 
@@ -96,9 +70,9 @@ export async function getStoreByDomain(host: string): Promise<Store | null> {
   return getStoredStores().find((s) => s.custom_domain === host && s.domain_verified) ?? null
 }
 
-export async function getActiveStore(): Promise<Store> {
+export async function getActiveStore(): Promise<Store | null> {
   const stores = await listStores()
-  return stores[0] || DEFAULT_DEMO_STORE
+  return stores[0] || null
 }
 
 export async function createStore(storeInput: Omit<Store, 'id' | 'created_at' | 'updated_at'>): Promise<Store> {
@@ -165,7 +139,14 @@ export async function updateStore(id: string, updates: Partial<Store>): Promise<
   const list = getStoredStores()
   const idx = list.findIndex((s) => s.id === id)
   if (idx === -1) {
-    const updated = { ...DEFAULT_DEMO_STORE, ...payload, id }
+    const updated: Store = {
+      name: 'Loja',
+      status: 'pending_approval',
+      created_at: new Date().toISOString(),
+      ...payload,
+      id,
+      updated_at: new Date().toISOString(),
+    }
     list.unshift(updated)
     saveStoredStores(list)
     return updated

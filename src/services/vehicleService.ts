@@ -9,84 +9,15 @@ import { isSupabaseConfigured, supabase } from './supabaseClient'
 
 const LOCAL_STORAGE_KEY = 'fcs_vehicles_cache'
 
-// Veículos demonstrativos pré-carregados para experiência imediata do usuário
-const INITIAL_DEMO_VEHICLES: Vehicle[] = [
-  {
-    id: 'demo-veh-001',
-    store_id: 'store-demo-001',
-    title: 'Toyota Corolla Altis 2.0 16V Flex Aut. 2023',
-    brand: 'Toyota',
-    model: 'Corolla Altis 2.0 16V Flex Aut.',
-    version: 'Altis 2.0 Flex Aut.',
-    model_year: 2023,
-    manufacturing_year: 2023,
-    fuel_type: 'Flex',
-    color: 'Prata',
-    mileage: 24500,
-    transmission: 'Automático',
-    price: 144900,
-    description: 'Único dono, todas as revisões feitas na concessionária autorizada. Impecável estado de conservação, laudo cautelar 100% aprovado.',
-    photos: [
-      'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
-    ],
-    status: 'published',
-    plate: 'BRA2E19',
-    plate_masked: 'BRA***9',
-    fipe_code: '002166-0',
-    fipe_price: 148900,
-    fipe_reference_month: 'outubro de 2026',
-    plate_lookup_status: 'success',
-    plate_lookup_provider: 'mock_vehicle_provider',
-    plate_last_checked_at: new Date().toISOString(),
-    fipe_last_checked_at: new Date().toISOString(),
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: 'demo-veh-002',
-    store_id: 'store-demo-001',
-    title: 'Jeep Compass Longitude 1.3 T270 Flex Aut. 2024',
-    brand: 'Jeep',
-    model: 'Compass Longitude 1.3 T270 4x2 Flex Aut.',
-    version: 'Longitude T270 Turbo Flex',
-    model_year: 2024,
-    manufacturing_year: 2024,
-    fuel_type: 'Flex',
-    color: 'Cinza Granite',
-    mileage: 11200,
-    transmission: 'Automático',
-    price: 169900,
-    description: 'Veículo em garantia de fábrica. Pacote High Tech com som Beats, teto solar panorâmico e pacote ADAS.',
-    photos: [
-      'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80',
-    ],
-    status: 'published',
-    plate: 'FCL2026',
-    plate_masked: 'FCL***6',
-    fipe_code: '017070-4',
-    fipe_price: 172900,
-    fipe_reference_month: 'outubro de 2026',
-    plate_lookup_status: 'success',
-    plate_lookup_provider: 'mock_vehicle_provider',
-    plate_last_checked_at: new Date().toISOString(),
-    fipe_last_checked_at: new Date().toISOString(),
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-]
-
 function getStoredVehicles(): Vehicle[] {
-  if (typeof window === 'undefined') return INITIAL_DEMO_VEHICLES
+  if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY)
-    if (!raw) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_DEMO_VEHICLES))
-      return INITIAL_DEMO_VEHICLES
-    }
-    return JSON.parse(raw) as Vehicle[]
+    if (!raw) return []
+    const parsed = JSON.parse(raw) as Vehicle[]
+    return parsed.filter((v) => !v.id.startsWith('demo-veh-'))
   } catch {
-    return INITIAL_DEMO_VEHICLES
+    return []
   }
 }
 
