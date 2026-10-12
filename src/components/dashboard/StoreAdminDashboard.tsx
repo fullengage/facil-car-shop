@@ -8,13 +8,13 @@ import {
   CarFront,
   PlusCircle,
   Target,
+  Pencil,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { Store, Vehicle } from '@/types'
 import { formatCurrency } from '@/utils/plateValidator'
 import { CrmKanbanBoard } from './CrmKanbanBoard'
-
 
 interface StoreAdminDashboardProps {
   activeStore: Store
@@ -151,6 +151,7 @@ export function StoreAdminDashboard({
                   <th className="p-3.5">Preço Anunciado</th>
                   <th className="p-3.5">Referência FIPE</th>
                   <th className="p-3.5 text-right">Status</th>
+                  <th className="p-3.5 text-center">Ações</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
@@ -180,6 +181,18 @@ export function StoreAdminDashboard({
                       <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-steel/10 text-steel">
                         {v.status === 'published' ? 'Publicado' : v.status}
                       </span>
+                    </td>
+                    <td className="p-3.5 text-center">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onSelectVehicle?.(v)
+                        }}
+                        className="inline-flex items-center gap-1 rounded-lg border border-border bg-white px-2.5 py-1 text-xs font-bold text-primary hover:bg-primary hover:text-white transition-colors"
+                      >
+                        <Pencil className="h-3 w-3" /> Editar
+                      </button>
                     </td>
                   </tr>
                 ))}

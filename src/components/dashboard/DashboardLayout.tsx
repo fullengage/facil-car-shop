@@ -31,6 +31,7 @@ interface DashboardLayoutProps {
   onOpenAddVehicle: () => void
   onOpenStoreModal: () => void
   onSelectVehicle?: (vehicle: Vehicle) => void
+  onEditStore?: (store: StoreType) => void
 }
 
 type Grupo = 'Plataforma' | 'Lojas' | 'Independente' | 'Comprador'
@@ -63,6 +64,7 @@ export function DashboardLayout({
   onOpenAddVehicle,
   onOpenStoreModal,
   onSelectVehicle,
+  onEditStore,
 }: DashboardLayoutProps) {
   const currentConfig = ROLES_CONFIG.find((r) => r.role === currentRole)!
 
@@ -140,6 +142,7 @@ export function DashboardLayout({
             vehicles={vehicles}
             onOpenAddVehicle={onOpenAddVehicle}
             onOpenStoreModal={onOpenStoreModal}
+            onEditStore={onEditStore}
           />
         )}
 

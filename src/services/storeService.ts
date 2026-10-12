@@ -131,3 +131,48 @@ export async function createStore(storeInput: Omit<Store, 'id' | 'created_at' | 
   saveStoredStores(list)
   return newStore
 }
+
+export async function updateStore(id: string, updates: Partial<Store>): Promise<Store | null> {
+  const payload = {
+    ...updates,
+    updated_at: new Date().toISOString(),
+    ...(updates.name ? { slug: slugify(updates.name) } : {}),
+  }
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('fcs_stores')
+        .update(payload)
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (!error && data) {
+        const list = getStoredStores()
+        const idx = list.findIndex((s) => s.id === id)
+        if (idx !== -1) {
+          list[idx] = { ...list[idx], ...data }
+          saveStoredStores(list)
+        }
+        return data as Store
+      }
+    } catch {
+      // Fallback para cache local
+    }
+  }
+
+  const list = getStoredStores()
+  const idx = list.findIndex((s) => s.id === id)
+  if (idx === -1) {
+    const updated = { ...DEFAULT_DEMO_STORE, ...payload, id }
+    list.unshift(updated)
+    saveStoredStores(list)
+    return updated
+  }
+
+  list[idx] = { ...list[idx], ...payload }
+  saveStoredStores(list)
+  return list[idx]
+}
+

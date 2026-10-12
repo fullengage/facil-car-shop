@@ -9,18 +9,19 @@ import {
   PlusCircle,
   Store as StoreIcon,
   ShieldCheck,
+  Pencil,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { Store, Vehicle } from '@/types'
 import { formatCurrency } from '@/utils/plateValidator'
 import { CrmKanbanBoard } from './CrmKanbanBoard'
 
-
 interface DealerDashboardProps {
   stores: Store[]
   vehicles: Vehicle[]
   onOpenAddVehicle: () => void
   onOpenStoreModal: () => void
+  onEditStore?: (store: Store) => void
 }
 
 export function DealerDashboard({
@@ -28,6 +29,7 @@ export function DealerDashboard({
   vehicles,
   onOpenAddVehicle,
   onOpenStoreModal,
+  onEditStore,
 }: DealerDashboardProps) {
   const [activeTab, setActiveTab] = React.useState<'overview' | 'crm' | 'stores' | 'team'>('overview')
 
@@ -223,6 +225,16 @@ export function DealerDashboard({
                   <p>📍 {s.address_street}, {s.address_number} - {s.address_city}/{s.address_state}</p>
                   <p>📞 {s.phone || '(11) 98888-7777'}</p>
                   <p>🌐 Vitrine: /loja/{s.slug || 'matriz'}</p>
+                </div>
+                <div className="border-t border-border pt-3 flex justify-end">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => onEditStore?.(s)}
+                    className="text-xs font-bold text-primary border-border hover:bg-primary hover:text-white transition-colors"
+                  >
+                    <Pencil className="h-3 w-3 mr-1" /> Editar Loja
+                  </Button>
                 </div>
               </div>
             ))}
