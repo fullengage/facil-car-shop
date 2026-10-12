@@ -1,7 +1,6 @@
 // ==============================================================================
-// FÁCIL CAR SHOP — APLICAÇÃO PRINCIPAL
-// Stack: Vite • TypeScript • React • Tailwind CSS
-// "Digite a placa, complete as fotos e anuncie seu carro."
+// FÁCIL CAR SHOP — PAINEL DE GESTÃO (ACESSO REAL)
+// Autenticação Real Supabase Auth • CRUD de Lojas e Veículos • Perfis Reais
 // ==============================================================================
 
 import * as React from 'react'
@@ -11,14 +10,18 @@ import { VehicleEditModal } from '@/components/vehicle/VehicleEditModal'
 import { StoreRegisterModal } from '@/components/store/StoreRegisterModal'
 import { StoreEditModal } from '@/components/store/StoreEditModal'
 import { ExternalQueriesDrawer } from '@/components/monitoring/ExternalQueriesDrawer'
+import { LoginForm } from '@/components/auth/LoginForm'
+import { useAuth } from '@/contexts/AuthContext'
 import { getActiveStore, listStores } from '@/services/storeService'
 import { listVehicles } from '@/services/vehicleService'
 import { DashboardLayout, type UserRole } from '@/components/dashboard/DashboardLayout'
 import type { Store, Vehicle } from '@/types'
-import { Pencil } from 'lucide-react'
+import { Pencil, ArrowLeft } from 'lucide-react'
 
 export default function PainelPage() {
   const navigate = useNavigate()
+  const { user, profile, userRole, isLoading: isAuthLoading, signOut } = useAuth()
+
   // Estados de Negócio
   const [activeStore, setActiveStore] = React.useState<Store | null>(null)
   const [stores, setStores] = React.useState<Store[]>([])
@@ -34,28 +37,40 @@ export default function PainelPage() {
   const [isStoreEditOpen, setIsStoreEditOpen] = React.useState(false)
   const [editingVehicle, setEditingVehicle] = React.useState<Vehicle | null>(null)
 
-  // Cockpit de Dashboards & Perfis
+  // Papel de navegação no painel (inicializa com o papel real autenticado)
   const [currentRole, setCurrentRole] = React.useState<UserRole>('LOJISTA')
 
-  // Carregamento inicial de Loja e Veículos
+  // Sincroniza o papel inicial com o perfil autenticado
   React.useEffect(() => {
-    async function init() {
+    if (userRole) {
+      setCurrentRole(userRole)
+    }
+  }, [userRole])
+
+  // Carregamento de Loja e Veículos quando o usuário está logado
+  React.useEffect(() => {
+    async function loadDashboardData() {
+      if (!user) return
+
       setIsLoading(true)
       try {
         const allStores = await listStores()
         setStores(allStores)
         const store = allStores[0] || (await getActiveStore())
         setActiveStore(store)
-        const vehicleList = await listVehicles(store.id)
+        const vehicleList = await listVehicles(store?.id)
         setVehicles(vehicleList)
       } catch (error) {
-        console.error('Erro ao carregar dados iniciais:', error)
+        console.error('Erro ao carregar dados do painel:', error)
       } finally {
         setIsLoading(false)
       }
     }
-    init()
-  }, [])
+
+    if (user) {
+      loadDashboardData()
+    }
+  }, [user])
 
   // Atualização após criação de novo veículo
   function handleVehicleCreated(newVehicle: Vehicle) {
@@ -84,12 +99,43 @@ export default function PainelPage() {
     setVehicles((prev) => prev.filter((v) => v.id !== deletedId))
   }
 
+  // 1. Verificando autenticação
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen bg-[#0b0f19] flex items-center justify-center text-white">
+        <div className="flex flex-col items-center space-y-3">
+          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-slate-400">Verificando credenciais de acesso...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // 2. Se não estiver autenticado, exibe formulário de acesso real
+  if (!user) {
+    return (
+      <div className="min-h-[calc(100vh-88px)] bg-slate-50 py-12 px-4 flex flex-col justify-center items-center">
+        <div className="mb-6">
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="inline-flex items-center gap-2 text-sm font-medium text-text hover:text-dark transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" /> Voltar para a vitrine pública
+          </button>
+        </div>
+        <LoginForm />
+      </div>
+    )
+  }
+
+  // 3. Carregando dados da loja para o usuário autenticado
   if (!activeStore && isLoading) {
     return (
       <div className="min-h-screen bg-[#0b0f19] flex items-center justify-center text-white">
         <div className="flex flex-col items-center space-y-3">
-          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-slate-400">Carregando Fácil Car Shop...</p>
+          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-slate-400">Carregando estoque e configurações...</p>
         </div>
       </div>
     )
@@ -141,7 +187,7 @@ export default function PainelPage() {
             <DashboardLayout
               currentRole={currentRole}
               onRoleChange={setCurrentRole}
-              onBackToMarketplace={() => navigate("/")}
+              onBackToMarketplace={() => navigate('/')}
               activeStore={activeStore}
               stores={stores.length > 0 ? stores : [activeStore]}
               vehicles={vehicles}
@@ -152,6 +198,10 @@ export default function PainelPage() {
                 setActiveStore(storeToEdit)
                 setIsStoreEditOpen(true)
               }}
+              userEmail={user.email}
+              userName={profile?.full_name}
+              onSignOut={signOut}
+              isSuperAdmin={profile?.role === 'super_admin'}
             />
           </div>
         ) : null}

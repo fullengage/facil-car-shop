@@ -12,6 +12,8 @@ export interface FCSProfile {
   phone: string | null;
   avatar_path: string | null;
   status: FCSProfileStatus;
+  role?: 'user' | 'super_admin';
+  cpf?: string | null;
   created_at: string;
   updated_at: string;
 }

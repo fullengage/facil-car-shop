@@ -15,7 +15,9 @@ import LiveLojasPage from '@/pages/site/LiveLojasPage'
 import NotFoundPage from '@/pages/site/NotFoundPage'
 import { CidadePage, LojaPage, MarcaPage, ModeloPage, VeiculoPage } from '@/pages/site/SitePages'
 import PainelPage from '@/pages/PainelPage'
+import LoginPage from '@/pages/LoginPage'
 import TiagoDemoPage from '@/pages/site/TiagoDemoPage'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 /** Rola até a âncora (#marcas, #anuncie...) ao trocar de rota ou de hash. */
 function ScrollToHash() {
@@ -34,29 +36,32 @@ function LojaRedirect() {
 
 export function App() {
   return (
-    <div className="flex min-h-screen flex-col bg-white text-text">
-      <TopBar />
-      <Header />
-      <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/carros" element={<LiveCarrosPage />} />
-          <Route path="/carros/:marca" element={<MarcaPage />} />
-          <Route path="/carros/:marca/:modelo" element={<ModeloPage />} />
-          <Route path="/carros-em/:cidade" element={<CidadePage />} />
-          <Route path="/veiculo/:slug" element={<VeiculoPage />} />
-          <Route path="/lojas" element={<LiveLojasPage />} />
-          <Route path="/lojas/:slug" element={<LojaPage />} />
-          <Route path="/loja/:slug" element={<LojaRedirect />} />
-          <Route path="/painel" element={<PainelPage />} />
-          <Route path="/previews/classificados-de-tiago" element={<TiagoDemoPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </main>
-      <Footer />
-      <ScrollToHash />
-      <Reveal />
-    </div>
+    <AuthProvider>
+      <div className="flex min-h-screen flex-col bg-white text-text">
+        <TopBar />
+        <Header />
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/carros" element={<LiveCarrosPage />} />
+            <Route path="/carros/:marca" element={<MarcaPage />} />
+            <Route path="/carros/:marca/:modelo" element={<ModeloPage />} />
+            <Route path="/carros-em/:cidade" element={<CidadePage />} />
+            <Route path="/veiculo/:slug" element={<VeiculoPage />} />
+            <Route path="/lojas" element={<LiveLojasPage />} />
+            <Route path="/lojas/:slug" element={<LojaPage />} />
+            <Route path="/loja/:slug" element={<LojaRedirect />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/painel" element={<PainelPage />} />
+            <Route path="/previews/classificados-de-tiago" element={<TiagoDemoPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </main>
+        <Footer />
+        <ScrollToHash />
+        <Reveal />
+      </div>
+    </AuthProvider>
   )
 }
 

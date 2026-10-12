@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "@/components/site/Link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, UserCheck } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const NAV = [
   { label: "Comprar", href: "/carros" },
@@ -16,6 +17,7 @@ const NAV = [
 /** Header branco fixo com sombra leve. No mobile vira drawer. */
 export function Header() {
   const [aberto, setAberto] = useState(false);
+  const { user, profile } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-[0_2px_20px_rgb(0_0_0/0.06)]">
@@ -38,12 +40,23 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            href="/painel"
-            className="hidden rounded-brand border border-slate-200 bg-slate-50 px-4 py-3 text-[14px] font-semibold text-slate-700 transition-colors hover:bg-slate-100 md:inline-flex"
-          >
-            Cockpit CRM
-          </Link>
+          {user ? (
+            <Link
+              href="/painel"
+              className="hidden items-center gap-2 rounded-brand border border-emerald-300 bg-emerald-50 px-4 py-2.5 text-[14px] font-semibold text-emerald-800 transition-colors hover:bg-emerald-100 md:inline-flex"
+            >
+              <UserCheck className="h-4 w-4 text-emerald-600" />
+              <span>{profile?.role === 'super_admin' ? 'Super Admin' : (profile?.full_name?.split(' ')[0] || 'Painel')}</span>
+            </Link>
+          ) : (
+            <Link
+              href="/painel"
+              className="hidden rounded-brand border border-slate-200 bg-slate-50 px-4 py-3 text-[14px] font-semibold text-slate-700 transition-colors hover:bg-slate-100 md:inline-flex"
+            >
+              Cockpit CRM
+            </Link>
+          )}
+
           <Link
             href="/#anuncie"
             className="hidden rounded-brand bg-primary px-6 py-3.5 text-[15px] font-medium uppercase tracking-[0.6px] text-white transition-colors hover:bg-dark sm:inline-flex"
