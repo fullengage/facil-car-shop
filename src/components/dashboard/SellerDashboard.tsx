@@ -94,7 +94,7 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
         <div>
           <div className="inline-flex items-center space-x-2 rounded-full border border-primary bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-2">
             <UserCheck className="w-3.5 h-3.5 text-primary" />
-            <span>Perfil: VENDEDOR • Carlos Eduardo Mendes</span>
+            <span>Perfil: VENDEDOR</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-dark">
             Meu Cockpit de Vendas
@@ -120,7 +120,7 @@ export function SellerDashboard({ vehicles, onOpenAddVehicle }: SellerDashboardP
             Comissões Acumuladas
           </span>
           <p className="text-xl sm:text-2xl font-black text-steel">
-            {formatCurrency(totalCommissions || 2355.0)}
+            {formatCurrency(totalCommissions)}
           </p>
           <span className="text-[11px] text-text mt-0.5 block">Vendas confirmadas</span>
         </div>
