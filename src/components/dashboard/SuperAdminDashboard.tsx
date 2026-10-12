@@ -31,6 +31,8 @@ export function SuperAdminDashboard() {
   const [dealers, setDealers] = React.useState<FCSDealer[]>([])
   const [plans, setPlans] = React.useState<FCSPlan[]>([])
   const [isLoading, setIsLoading] = React.useState(true)
+  const [actionError, setActionError] = React.useState<string | null>(null)
+  const [statusSaving, setStatusSaving] = React.useState<string | null>(null)
 
   const loadData = React.useCallback(async () => {
     setIsLoading(true)
@@ -58,7 +60,11 @@ export function SuperAdminDashboard() {
     dealerId: string,
     newStatus: 'active' | 'suspended' | 'pending'
   ) => {
+    setActionError(null)
+    setStatusSaving(dealerId)
     const success = await updateDealerStatus(dealerId, newStatus)
+    setStatusSaving(null)
+    if (!success) setActionError('Não foi possível alterar a revenda. Confirme suas permissões e tente novamente.')
     if (success) {
       setDealers((prev) =>
         prev.map((d) => (d.id === dealerId ? { ...d, status: newStatus } : d))
@@ -148,6 +154,17 @@ export function SuperAdminDashboard() {
         </div>
       </div>
 
+      {/* Fila de ações do operador, baseada apenas em registros carregados */}
+      <section className="rounded-2xl border border-border bg-white p-5" aria-label="Pendências operacionais">
+        <h3 className="font-bold text-dark text-lg">Ações pendentes de hoje</h3>
+        <p className="mt-1 text-sm text-text">Priorize aprovações e pendências reais. Pagamentos precisam de conferência independente no banco.</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl bg-surface p-4"><p className="text-sm text-text">Revendas para aprovar</p><p className="text-2xl font-bold text-dark">{dealers.filter(d => d.status === 'pending').length}</p></div>
+          <div className="rounded-xl bg-surface p-4"><p className="text-sm text-text">Revendas suspensas</p><p className="text-2xl font-bold text-dark">{dealers.filter(d => d.status === 'suspended').length}</p></div>
+          <div className="rounded-xl bg-surface p-4"><p className="text-sm text-text">Cobranças PIX</p><p className="mt-2 text-sm font-semibold text-dark">Conferência ainda não integrada</p></div>
+        </div>
+        {actionError && <p role="alert" className="mt-3 rounded-lg bg-red-50 p-3 text-sm text-red-700">{actionError}</p>}
+      </section>
       {/* Tabela de Lojistas e Ações de Moderação */}
       <div className="rounded-2xl border border-border bg-white overflow-hidden">
         <div className="p-4 border-b border-border flex items-center justify-between">
@@ -207,6 +224,7 @@ export function SuperAdminDashboard() {
                       {dealer.status !== 'active' ? (
                         <Button
                           size="sm"
+                          disabled={statusSaving === dealer.id}
                           onClick={() => handleStatusChange(dealer.id, 'active')}
                           className="h-8 bg-steel hover:bg-dark text-white text-xs font-bold"
                         >
@@ -217,6 +235,7 @@ export function SuperAdminDashboard() {
                         <Button
                           size="sm"
                           variant="outline"
+                          disabled={statusSaving === dealer.id}
                           onClick={() => handleStatusChange(dealer.id, 'suspended')}
                           className="h-8 border-red-900/60 text-red-400 hover:bg-red-500/10 text-xs"
                         >
