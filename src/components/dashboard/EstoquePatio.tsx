@@ -9,12 +9,28 @@ import { Plus, Search, Car } from 'lucide-react'
 import type { Vehicle, VehicleStatus } from '@/types'
 import { formatCurrency } from '@/utils/plateValidator'
 
-type Filtro = 'todos' | 'estoque' | 'vendidos' | 'abaixo_fipe' | 'rascunhos'
+type Filtro = 'todos' | 'estoque' | 'vendidos' | 'abaixo_fipe' | 'rascunhos' | 'parados'
 type Ordem = 'entrada-desc' | 'entrada-asc' | 'preco-desc' | 'preco-asc'
+
+/**
+ * Alerta de carro parado: veículo em estoque há mais dias que este limite.
+ * ponytail: 60 dias é um padrão de mercado; ajustar quando a loja definir o próprio.
+ */
+export const DIAS_PARADO = 60
+
+const DIA_MS = 24 * 60 * 60 * 1000
+
+/** Dias desde a entrada (created_at). Não considera reentradas: o cadastro não tem esse dado. */
+export function diasEmEstoque(v: Vehicle, agora: number = Date.now()): number {
+  return Math.floor((agora - new Date(v.created_at).getTime()) / DIA_MS)
+}
+
+const isParado = (v: Vehicle, agora: number) => v.status === 'published' && diasEmEstoque(v, agora) >= DIAS_PARADO
 
 const FILTROS: { value: Filtro; label: string }[] = [
   { value: 'todos', label: 'Todos' },
   { value: 'estoque', label: 'Em estoque' },
+  { value: 'parados', label: 'Parados' },
   { value: 'vendidos', label: 'Vendidos' },
   { value: 'abaixo_fipe', label: 'Abaixo da FIPE' },
   { value: 'rascunhos', label: 'Rascunhos' },
@@ -29,11 +45,12 @@ const STATUS_LABEL: Record<VehicleStatus, { label: string; cls: string }> = {
 
 const abaixoFipe = (v: Vehicle) => (v.fipe_price ?? 0) > 0 && v.price < (v.fipe_price ?? 0)
 
-function passaFiltro(v: Vehicle, f: Filtro): boolean {
+function passaFiltro(v: Vehicle, f: Filtro, agora: number): boolean {
   if (f === 'todos') return true
   if (f === 'estoque') return v.status === 'published'
   if (f === 'vendidos') return v.status === 'sold'
   if (f === 'rascunhos') return v.status === 'draft'
+  if (f === 'parados') return isParado(v, agora)
   return abaixoFipe(v)
 }
 
@@ -48,6 +65,10 @@ export function EstoquePatio({ vehicles, onOpenAddVehicle, onSelectVehicle }: Es
   const [busca, setBusca] = React.useState('')
   const [ordem, setOrdem] = React.useState<Ordem>('entrada-desc')
 
+  // Momento da renderização: usado para contar dias parados
+  const agora = Date.now()
+  const parados = vehicles.filter((v) => isParado(v, agora))
+
   const lista = React.useMemo(() => {
     const q = busca.trim().toLowerCase()
     const cmp: Record<Ordem, (a: Vehicle, b: Vehicle) => number> = {
@@ -57,7 +78,7 @@ export function EstoquePatio({ vehicles, onOpenAddVehicle, onSelectVehicle }: Es
       'preco-asc': (a, b) => a.price - b.price,
     }
     return vehicles
-      .filter((v) => passaFiltro(v, filtro))
+      .filter((v) => passaFiltro(v, filtro, agora))
       .filter((v) => !q || [v.plate_masked, v.title, v.brand, v.model, v.color].some((c) => c?.toLowerCase().includes(q)))
       .sort(cmp[ordem])
   }, [vehicles, filtro, busca, ordem])
@@ -80,9 +101,20 @@ export function EstoquePatio({ vehicles, onOpenAddVehicle, onSelectVehicle }: Es
         </button>
       </div>
 
+      {parados.length > 0 && (
+        <div role="alert" className="flex flex-wrap items-center justify-between gap-3 rounded-brand border border-primary/30 bg-primary/5 px-4 py-3">
+          <p className="text-[14px] text-dark">
+            <strong>{parados.length} {parados.length === 1 ? 'veículo parado' : 'veículos parados'}</strong> há mais de {DIAS_PARADO} dias no pátio.
+          </p>
+          <button type="button" onClick={() => setFiltro('parados')} className="text-[13px] font-bold text-primary hover:text-dark">
+            Ver parados
+          </button>
+        </div>
+      )}
+
       <div role="tablist" aria-label="Filtrar por situação" className="flex flex-wrap gap-2">
         {FILTROS.map((f) => {
-          const total = vehicles.filter((v) => passaFiltro(v, f.value)).length
+          const total = vehicles.filter((v) => passaFiltro(v, f.value, agora)).length
           const ativo = filtro === f.value
           return (
             <button
@@ -175,7 +207,14 @@ export function EstoquePatio({ vehicles, onOpenAddVehicle, onSelectVehicle }: Es
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex rounded-brand px-2.5 py-1 text-[12px] font-bold ${st.cls}`}>{st.label}</span>
+                    <span className="flex flex-wrap gap-1.5">
+                      <span className={`inline-flex rounded-brand px-2.5 py-1 text-[12px] font-bold ${st.cls}`}>{st.label}</span>
+                      {isParado(v, agora) && (
+                        <span className="inline-flex rounded-brand bg-primary/10 px-2.5 py-1 text-[12px] font-bold text-primary">
+                          Parado · {diasEmEstoque(v, agora)} dias
+                        </span>
+                      )}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-right">
                     {onSelectVehicle && (
