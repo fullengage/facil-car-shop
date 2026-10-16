@@ -11,5 +11,21 @@ export default defineConfig({
       '@': path.resolve(import.meta.dirname, './src'),
     },
   },
+  build: {
+    target: 'es2015',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // Vendor chunks for better caching
+          if (id.includes('node_modules/react')) return 'vendor-react'
+          if (id.includes('node_modules/@supabase')) return 'vendor-supabase'
+          if (id.includes('node_modules/lucide-react') || id.includes('node_modules/embla-carousel')) {
+            return 'vendor-ui'
+          }
+        },
+      },
+    },
+    chunkSizeWarningLimit: 500,
+  },
 })
 
