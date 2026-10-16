@@ -19,7 +19,9 @@ import { AuthProvider } from '@/contexts/AuthContext'
 
 // Lazy load de páginas pesadas
 const PainelPage = lazy(() => import('@/pages/PainelPage'))
+const PlansPage = lazy(() => import('@/pages/painel/PlansPage'))
 const TiagoDemoPage = lazy(() => import('@/pages/site/TiagoDemoPage'))
+const SubscriptionResultPage = lazy(() => import('@/pages/painel/SubscriptionResultPage'))
 
 // Loading fallback minimalista
 function PageLoader() {
@@ -64,6 +66,10 @@ export function App() {
             <Route path="/loja/:slug" element={<LojaRedirect />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/painel" element={<Suspense fallback={<PageLoader />}><PainelPage /></Suspense>} />
+            <Route path="/painel/planos" element={<Suspense fallback={<PageLoader />}><PlansPage /></Suspense>} />
+            <Route path="/painel/assinatura/sucesso" element={<Suspense fallback={<PageLoader />}><SubscriptionResultPage /></Suspense>} />
+            <Route path="/painel/assinatura/erro" element={<Suspense fallback={<PageLoader />}><SubscriptionResultPage /></Suspense>} />
+            <Route path="/painel/assinatura/pendente" element={<Suspense fallback={<PageLoader />}><SubscriptionResultPage /></Suspense>} />
             <Route path="/previews/classificados-de-tiago" element={<Suspense fallback={<PageLoader />}><TiagoDemoPage /></Suspense>} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
