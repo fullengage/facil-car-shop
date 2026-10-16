@@ -15,6 +15,8 @@ import { useAuth } from '@/contexts/AuthContext'
 import { getActiveStore, listStores } from '@/services/storeService'
 import { listVehicles } from '@/services/vehicleService'
 import { DashboardLayout, type UserRole } from '@/components/dashboard/DashboardLayout'
+import { BuyerDashboard } from '@/components/dashboard/BuyerDashboard'
+import { SuperAdminDashboard } from '@/components/dashboard/SuperAdminDashboard'
 import type { Store, Vehicle } from '@/types'
 import { Pencil, ArrowLeft } from 'lucide-react'
 
@@ -38,14 +40,8 @@ export default function PainelPage() {
   const [editingVehicle, setEditingVehicle] = React.useState<Vehicle | null>(null)
 
   // Papel de navegação no painel (inicializa com o papel real autenticado)
-  const [currentRole, setCurrentRole] = React.useState<UserRole>('LOJISTA')
-
-  // Sincroniza o papel inicial com o perfil autenticado
-  React.useEffect(() => {
-    if (userRole) {
-      setCurrentRole(userRole)
-    }
-  }, [userRole])
+  // O perfil exibido é sempre o atribuído à sessão autenticada, nunca uma seleção do navegador.
+  const currentRole: UserRole = userRole
 
   // Carregamento de Loja e Veículos quando o usuário está logado
   React.useEffect(() => {
@@ -130,7 +126,7 @@ export default function PainelPage() {
   }
 
   // 3. Carregando dados da loja para o usuário autenticado
-  if (!activeStore && isLoading) {
+  if (!activeStore && isLoading && currentRole !== 'COMPRADOR' && currentRole !== 'SUPER_ADMIN') {
     return (
       <div className="min-h-screen bg-[#0b0f19] flex items-center justify-center text-white">
         <div className="flex flex-col items-center space-y-3">
@@ -186,7 +182,6 @@ export default function PainelPage() {
           <div className="rounded-brand bg-surface p-4 text-dark sm:p-8">
             <DashboardLayout
               currentRole={currentRole}
-              onRoleChange={setCurrentRole}
               onBackToMarketplace={() => navigate('/')}
               activeStore={activeStore}
               stores={stores.length > 0 ? stores : [activeStore]}
@@ -204,7 +199,16 @@ export default function PainelPage() {
               isSuperAdmin={profile?.role === 'super_admin'}
             />
           </div>
-        ) : null}
+        ) : currentRole === 'SUPER_ADMIN' ? (
+          <SuperAdminDashboard />
+        ) : currentRole === 'COMPRADOR' ? (
+          <BuyerDashboard vehicles={[]} />
+        ) : (
+          <div className="rounded-brand bg-surface p-8 text-dark" role="status">
+            <h2 className="text-2xl font-bold">Nenhuma loja vinculada ao seu acesso</h2>
+            <p className="mt-2">Solicite o vínculo à sua loja ou realize o cadastro autorizado para continuar.</p>
+          </div>
+        )}
       </main>
 
       {/* Modais de Criação */}

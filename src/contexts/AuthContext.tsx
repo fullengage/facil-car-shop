@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(null)
   const [session, setSession] = React.useState<Session | null>(null)
   const [profile, setProfile] = React.useState<FCSProfile | null>(null)
-  const [userRole, setUserRole] = React.useState<UserRole>('LOJISTA')
+  const [userRole, setUserRole] = React.useState<UserRole>('COMPRADOR')
   const [isLoading, setIsLoading] = React.useState(true)
 
   // Busca perfil e papel real no banco
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUserRole('VENDEDOR')
             return
           default:
-            setUserRole('LOJISTA')
+            setUserRole('COMPRADOR')
             return
         }
       }
@@ -91,11 +91,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return
       }
 
-      // Se não tiver papel configurado, assume LOJISTA padrão para gestão
-      setUserRole('LOJISTA')
+      // Sem vínculo de gestão, entra como comprador até onboarding válido.
+      setUserRole('COMPRADOR')
     } catch (err) {
       console.warn('Erro ao carregar perfil real:', err)
-      setUserRole('LOJISTA')
+      setUserRole('COMPRADOR')
     }
   }, [])
 
@@ -125,7 +125,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         fetchProfileAndRole(newSession.user).finally(() => setIsLoading(false))
       } else {
         setProfile(null)
-        setUserRole('LOJISTA')
+        setUserRole('COMPRADOR')
         setIsLoading(false)
       }
     })

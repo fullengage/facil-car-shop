@@ -24,7 +24,6 @@ export type UserRole =
 
 interface DashboardLayoutProps {
   currentRole: UserRole
-  onRoleChange: (role: UserRole) => void
   onBackToMarketplace: () => void
   activeStore: StoreType
   stores: StoreType[]
@@ -39,29 +38,22 @@ interface DashboardLayoutProps {
   isSuperAdmin?: boolean
 }
 
-type Grupo = 'Plataforma' | 'Lojas' | 'Independente' | 'Comprador'
-
 const ROLES_CONFIG: {
   role: UserRole
   label: string
   desc: string
-  grupo: Grupo
-  nivel: 0 | 1 | 2
   icon: typeof ShieldCheck
 }[] = [
-  { role: 'SUPER_ADMIN', label: 'Super Admin', desc: 'Plataforma e MRR', grupo: 'Plataforma', nivel: 0, icon: ShieldCheck },
-  { role: 'LOJISTA', label: 'Lojista', desc: 'Rede de lojas e equipe', grupo: 'Lojas', nivel: 0, icon: Building2 },
-  { role: 'ADMIN_LOJA', label: 'Admin da loja', desc: 'Unidade e showroom', grupo: 'Lojas', nivel: 1, icon: UserCog },
-  { role: 'VENDEDOR_LOJA', label: 'Vendedor da loja', desc: 'Leads e comissões da loja', grupo: 'Lojas', nivel: 2, icon: Briefcase },
-  { role: 'VENDEDOR', label: 'Vendedor autônomo', desc: 'Pessoa física, sem loja', grupo: 'Independente', nivel: 0, icon: Users },
-  { role: 'COMPRADOR', label: 'Comprador', desc: 'Favoritos e alertas', grupo: 'Comprador', nivel: 0, icon: UserRound },
+  { role: 'SUPER_ADMIN', label: 'Super Admin', desc: 'Plataforma e MRR', icon: ShieldCheck },
+  { role: 'LOJISTA', label: 'Lojista', desc: 'Rede de lojas e equipe', icon: Building2 },
+  { role: 'ADMIN_LOJA', label: 'Admin da loja', desc: 'Unidade e showroom', icon: UserCog },
+  { role: 'VENDEDOR_LOJA', label: 'Vendedor da loja', desc: 'Leads e comissões da loja', icon: Briefcase },
+  { role: 'VENDEDOR', label: 'Vendedor autônomo', desc: 'Pessoa física, sem loja', icon: Users },
+  { role: 'COMPRADOR', label: 'Comprador', desc: 'Favoritos e alertas', icon: UserRound },
 ]
-
-const GRUPOS: Grupo[] = ['Plataforma', 'Lojas', 'Independente', 'Comprador']
 
 export function DashboardLayout({
   currentRole,
-  onRoleChange,
   onBackToMarketplace,
   activeStore,
   stores,
@@ -101,41 +93,19 @@ export function DashboardLayout({
             </div>
           )}
 
-          <nav className="space-y-5">
-            {GRUPOS.map((grupo) => {
-              const itens = ROLES_CONFIG.filter((r) => r.grupo === grupo)
-              return (
-                <div key={grupo}>
-                  <p className="px-3 pb-2 text-[12px] font-bold uppercase tracking-[0.8px] text-text">{grupo}</p>
-                  <ul className="space-y-1">
-                    {itens.map((item) => {
-                      const ativo = item.role === currentRole
-                      const Icon = item.icon
-                      return (
-                        <li key={item.role} style={{ paddingLeft: item.nivel * 16 }}>
-                          <button
-                            type="button"
-                            aria-current={ativo ? 'page' : undefined}
-                            onClick={() => onRoleChange(item.role)}
-                            className={`flex w-full items-center gap-3 rounded-brand px-3 py-2.5 text-left transition-colors ${
-                              ativo ? 'bg-primary text-white' : 'text-dark hover:bg-surface'
-                            }`}
-                          >
-                            <Icon className="h-4 w-4 shrink-0" aria-hidden />
-                            <span className="min-w-0">
-                              <span className="block text-[15px] font-bold leading-tight">{item.label}</span>
-                              <span className={`block truncate text-[12px] ${ativo ? 'text-white/80' : 'text-text'}`}>{item.desc}</span>
-                            </span>
-                          </button>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </div>
-              )
-            })}
+          <nav aria-label="Seu perfil" className="space-y-3">
+            <p className="px-3 pb-1 text-[12px] font-bold uppercase tracking-wide text-text">Seu acesso</p>
+            <div aria-current="page" className="flex items-center gap-3 rounded-brand bg-primary px-3 py-3 text-white">
+              {(() => {
+                const Icon = currentConfig.icon
+                return <Icon className="h-5 w-5 shrink-0" aria-hidden />
+              })()}
+              <div>
+                <p className="text-[15px] font-bold">{currentConfig.label}</p>
+                <p className="text-xs text-white/80">{currentConfig.desc}</p>
+              </div>
+            </div>
           </nav>
-
           <div className="mt-5 border-t border-border pt-4 space-y-2">
             <button
               type="button"
