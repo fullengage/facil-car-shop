@@ -33,7 +33,7 @@ export function StoreAdminDashboard({
   const [stockSearch, setStockSearch] = React.useState('')
 
   const storeVehicles = vehicles.filter(
-    (v) => !v.store_id || v.store_id === activeStore.id
+    (v) => v.store_id === activeStore.id
   )
 
   const filteredStock = storeVehicles.filter(
@@ -79,14 +79,14 @@ export function StoreAdminDashboard({
 
         <div className="rounded-2xl border border-border bg-white p-4">
           <span className="text-xs font-medium text-text block mb-1">Consultores Ativos</span>
-          <p className="text-2xl font-black text-primary">2 vendedores</p>
-          <span className="text-xs text-text mt-1 block">Plantão presencial & WhatsApp</span>
+          <p className="text-lg font-bold text-primary">Não disponível</p>
+          <span className="text-xs text-text mt-1 block">Necessário consultar equipe cadastrada</span>
         </div>
 
         <div className="rounded-2xl border border-border bg-white p-4">
           <span className="text-xs font-medium text-text block mb-1">Meta do Mês</span>
-          <p className="text-2xl font-black text-steel">8 / 12 vendas</p>
-          <span className="text-xs text-steel mt-1 block">67% da meta atingida</span>
+          <p className="text-2xl font-black text-steel">Não disponível</p>
+          <span className="text-xs text-steel mt-1 block">Meta e vendas ainda não vinculadas</span>
         </div>
       </div>
 
