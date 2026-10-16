@@ -71,7 +71,8 @@ Deno.serve(async request => {
     return json({ error: 'provider_verification_failed' }, 502);
   }
   const resource = await response.json() as Record<string, unknown>;
-  const collectorId = String(resource.collector_id ?? resource.collector?.id ?? '');
+  const collector = resource.collector as Record<string, unknown> | undefined;
+  const collectorId = String(resource.collector_id ?? collector?.id ?? '');
   if (!collectorId || collectorId !== collectorExpected) {
     console.error('Mercado Pago collector mismatch');
     return json({ error: 'collector_mismatch' }, 403);
