@@ -5,6 +5,7 @@ import { Button } from "@/components/site/ui/Button";
 const PLANOS = [
   {
     nome: "Básico",
+    checkoutUrl: "https://mpago.la/1DvVg8W",
     preco: "59,90",
     porCarro: "R$ 5,99 / carro",
     destaque: false,
@@ -17,6 +18,7 @@ const PLANOS = [
   },
   {
     nome: "Profissional",
+    checkoutUrl: "https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=2b784b1240414e7e8308c04f56b75420",
     preco: "119,90",
     porCarro: "R$ 4,80 / carro",
     destaque: true,
@@ -29,6 +31,7 @@ const PLANOS = [
   },
   {
     nome: "Premium",
+    checkoutUrl: "https://mpago.la/1wfRP3R",
     preco: "195,90",
     porCarro: "R$ 3,92 / carro",
     destaque: false,
@@ -41,6 +44,7 @@ const PLANOS = [
   },
   {
     nome: "Enterprise",
+    checkoutUrl: "https://mpago.la/1ZMTy7b",
     preco: "290,00",
     porCarro: "R$ 2,90 / carro",
     destaque: false,
@@ -90,7 +94,7 @@ export function Planos() {
                 ))}
               </ul>
               <div className="mt-auto pt-8">
-                <Button href="/#anuncie" variant={p.destaque ? "primary" : "dark"} className="w-full text-[14px]">
+                <Button href={p.checkoutUrl} variant={p.destaque ? "primary" : "dark"} className="w-full text-[14px]">
                   Começar agora
                 </Button>
               </div>
